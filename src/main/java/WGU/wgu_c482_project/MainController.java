@@ -52,7 +52,14 @@ public class MainController implements Initializable {
     private TableColumn<Product, Double> productsPriceCol;
     /////////////////////////////////////////////////////////
 
-
+    public boolean search(int id){
+        for(Part part : Inventory.getAllParts()){
+            if(part.getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Main Menu Scene Initialized");
@@ -70,6 +77,10 @@ public class MainController implements Initializable {
         productsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         productsInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         productsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        if(search(4)){
+            System.out.println("found 2!");
+        }
     }
 
     /////////////////////////PARTS BUTTONS/////////////////////////////////////////////////////////////

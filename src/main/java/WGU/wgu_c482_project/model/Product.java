@@ -10,7 +10,7 @@ public class Product {
     private int stock;
     private int min;
     private int max;
-    private static ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
 
 
@@ -72,13 +72,13 @@ public class Product {
     }
     ////////////////////////////////////////////////////////////
     /////////////////ASSOCIATED PARTS METHODS///////////////
-    public static ObservableList<Part> getAllAssociatedParts(){
+    public ObservableList<Part> getAllAssociatedParts(){
         return associatedParts;
     }
-    public static void addAssociatedPart(Part part){
+    public void addAssociatedPart(Part part){
         associatedParts.add(part);
     }
-    public static boolean deleteAssociatedPart(Part selectedAssociatedPart){
+    public boolean deleteAssociatedPart(Part selectedAssociatedPart){
         return true; //?
     }
 }
