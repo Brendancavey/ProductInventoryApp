@@ -3,6 +3,7 @@ package WGU.wgu_c482_project;
 import WGU.wgu_c482_project.model.InHousePart;
 import WGU.wgu_c482_project.model.Inventory;
 import WGU.wgu_c482_project.model.Part;
+import WGU.wgu_c482_project.model.Product;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,10 +28,14 @@ public class main extends Application {
         InHousePart screw = new InHousePart(2, "screw", 5.90, 4, 1, 10, 4231);
         InHousePart pencil = new InHousePart(3, "Pencil", 100.00, 99, 98, 1000, 4432);
 
+        Product cup = new Product(10, "cup", 2.00, 8, 1, 21);
+
         Inventory.addPart(hammer);
         Inventory.addPart(screw);
         Inventory.addPart(pencil);
-        System.out.println(Inventory.getAllParts());
+        Inventory.addProduct(cup);
+
+
 
         launch();
     }

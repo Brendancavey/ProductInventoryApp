@@ -53,12 +53,12 @@
                   <TableColumn fx:id="partsPriceCol" prefWidth="137.0" text="Price/ Cost per Unit" />
               </columns>
             </TableView>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TableView fx:id="productsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
               <columns>
-                <TableColumn prefWidth="75.0" text="Product ID" />
-                <TableColumn prefWidth="93.0" text="Product Name" />
-                  <TableColumn prefWidth="95.0" text="Inventory Level" />
-                  <TableColumn prefWidth="138.0" text="Price/ Cost per Unit" />
+                <TableColumn fx:id="productsIDCol" prefWidth="75.0" text="Product ID" />
+                <TableColumn fx:id="productsNameCol" prefWidth="93.0" text="Product Name" />
+                  <TableColumn fx:id="productsInvLevelCol" prefWidth="95.0" text="Inventory Level" />
+                  <TableColumn fx:id="productsPriceCol" prefWidth="138.0" text="Price/ Cost per Unit" />
               </columns>
             </TableView>
             <HBox prefHeight="100.0" prefWidth="407.0" spacing="195.0">

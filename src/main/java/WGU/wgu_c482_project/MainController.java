@@ -3,6 +3,7 @@ package WGU.wgu_c482_project;
 
 import WGU.wgu_c482_project.model.Inventory;
 import WGU.wgu_c482_project.model.Part;
+import WGU.wgu_c482_project.model.Product;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -26,31 +27,49 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-
-    @FXML
-    private TableColumn<Part, Integer> partsIDCol;
-
+    //////////////INITIALIZING PARTS TABLE VARIABLES///////////////////
     @FXML
     private TableView<Part> partsTableView;
-
+    @FXML
+    private TableColumn<Part, Integer> partsIDCol;
     @FXML
     private TableColumn<Part, String> partsNameCol;
-
     @FXML
     private TableColumn<Part, Integer> partsInvLevelCol;
-
     @FXML
     private TableColumn<Part, Double> partsPriceCol;
+    ///////////////////////////////////////////////////////
+    ////////////INITIALIZING PRODUCTS TABLE VARIABLES////////////////
+    @FXML
+    private TableView<Product> productsTableView;
+    @FXML
+    private TableColumn<Product, Integer> productsIDCol;
+    @FXML
+    private TableColumn<Product, String> productsNameCol;
+    @FXML
+    private TableColumn<Product, Integer> productsInvLevelCol;
+    @FXML
+    private TableColumn<Product, Double> productsPriceCol;
+    /////////////////////////////////////////////////////////
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Main Menu Scene Initialized");
-        partsTableView.setItems(Inventory.getAllParts());
+        ///////////////TESTING OUT PARTS TABLE VIEW///////////////////////
         //calls get method from Parts class that corresponds to the parameter
+        partsTableView.setItems(Inventory.getAllParts());
         partsIDCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         partsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         partsInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////TESTING OUT PRODUCTS TABLE VIEW//////////////
+        productsTableView.setItems((Inventory.getAllProducts()));
+        productsIDCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        productsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        productsInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        productsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
     /////////////////////////PARTS BUTTONS/////////////////////////////////////////////////////////////
