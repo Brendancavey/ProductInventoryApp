@@ -1,8 +1,6 @@
 package WGU.wgu_c482_project;
 
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,15 +14,15 @@ import java.io.IOException;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-public class Controller2 implements Initializable {
+public class DisplayPartsController implements Initializable {
 
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Scene 2 initialized");}
+    public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Display Parts Scene Initialized");}
 
     public void toMain(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("hello-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
 
         //get the stage from an event's source widget
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
