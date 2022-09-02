@@ -1,5 +1,8 @@
 package WGU.wgu_c482_project;
 
+
+import WGU.wgu_c482_project.model.Inventory;
+import WGU.wgu_c482_project.model.Part;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -8,6 +11,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.application.Application;
 
@@ -20,14 +26,32 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
+
     @FXML
-    protected void onHelloButtonClick() {
+    private TableColumn<Part, Integer> partsIDCol;
 
+    @FXML
+    private TableView<Part> partsTableView;
 
-    }
+    @FXML
+    private TableColumn<Part, String> partsNameCol;
+
+    @FXML
+    private TableColumn<Part, Integer> partsInvLevelCol;
+
+    @FXML
+    private TableColumn<Part, Double> partsPriceCol;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Main Menu Scene Initialized");}
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("Main Menu Scene Initialized");
+        partsTableView.setItems(Inventory.getAllParts());
+        //calls get method from Parts class that corresponds to the parameter
+        partsIDCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        partsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        partsInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        partsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+    }
 
     /////////////////////////PARTS BUTTONS/////////////////////////////////////////////////////////////
     public void onAddPart(ActionEvent actionEvent) throws IOException {

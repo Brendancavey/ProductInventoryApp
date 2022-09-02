@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxWidth="1028.0" prefHeight="544.0" prefWidth="919.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WGU.wgu_c482_project.MainController">
+<AnchorPane maxWidth="1028.0" prefHeight="544.0" prefWidth="919.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WGU.wgu_c482_project.MainController">
    <children>
       <GridPane gridLinesVisible="true" layoutX="57.0" layoutY="92.0" prefHeight="386.0" prefWidth="809.0">
          <columnConstraints>
@@ -45,12 +45,12 @@
                   <Insets left="25.0" top="10.0" />
                </GridPane.margin>
             </HBox>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+            <TableView fx:id="partsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
               <columns>
-                <TableColumn prefWidth="75.0" text="Part ID" />
-                <TableColumn prefWidth="75.0" text="Part Name" />
-                  <TableColumn prefWidth="119.0" text="Inventory Level" />
-                  <TableColumn prefWidth="137.0" text="Price/ Cost per Unit" />
+                <TableColumn fx:id="partsIDCol" prefWidth="75.0" text="Part ID" />
+                <TableColumn fx:id="partsNameCol" prefWidth="75.0" text="Part Name" />
+                  <TableColumn fx:id="partsInvLevelCol" prefWidth="119.0" text="Inventory Level" />
+                  <TableColumn fx:id="partsPriceCol" prefWidth="137.0" text="Price/ Cost per Unit" />
               </columns>
             </TableView>
             <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
