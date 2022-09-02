@@ -1,14 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="352.0" prefWidth="437.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WGU.wgu_c482_project.ModifyPartsController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
-   <Label prefHeight="65.0" prefWidth="148.0" text="Modify Parts Screen" />
-    <Button onAction="#toMain" text="Go to main menu" />
-</VBox>
+<AnchorPane prefHeight="590.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WGU.wgu_c482_project.ModifyPartsController">
+    <children>
+        <Button layoutX="479.0" layoutY="443.0" maxHeight="92.0" maxWidth="139.0" mnemonicParsing="false" onAction="#toMain" prefHeight="42.0" prefWidth="91.0" text="Cancel" />
+        <Button layoutX="366.0" layoutY="443.0" maxHeight="42.0" maxWidth="91.0" mnemonicParsing="false" onAction="#onSave" prefHeight="42.0" prefWidth="91.0" text="Save" />
+        <HBox layoutX="45.0" layoutY="24.0" prefHeight="49.0" prefWidth="390.0" spacing="40.0">
+            <children>
+                <Label prefHeight="30.0" prefWidth="121.0" text="Modify Part">
+                    <font>
+                        <Font name="System Bold" size="20.0" />
+                    </font>
+                </Label>
+                <RadioButton fx:id="inHouse" mnemonicParsing="false" onAction="#onInHouse" selected="true" text="In-House">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                    <toggleGroup>
+                        <ToggleGroup fx:id="addPartSelection" />
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="outsourced" mnemonicParsing="false" onAction="#onOutsourced" text="Outsourced" toggleGroup="$addPartSelection">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </RadioButton>
+            </children>
+        </HBox>
+        <HBox layoutX="64.0" layoutY="104.0" prefHeight="292.0" prefWidth="320.0">
+            <children>
+                <VBox prefHeight="292.0" prefWidth="158.0" spacing="15.0">
+                    <children>
+                        <Label text="ID">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="10.0" text="Name">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="37.0" text="Inventory">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="64.0" text="Price/Cost">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="91.0" text="Max">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="machineID" layoutX="10.0" layoutY="118.0" text="Machine ID">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <VBox layoutX="10.0" layoutY="10.0" prefHeight="292.0" prefWidth="158.0" spacing="17.0">
+                    <children>
+                        <TextField disable="true" promptText="Auto-Gen. Disabled" />
+                        <TextField layoutX="10.0" layoutY="10.0" />
+                        <TextField layoutX="10.0" layoutY="35.0" />
+                        <TextField layoutX="10.0" layoutY="60.0" />
+                        <TextField layoutX="10.0" layoutY="85.0" />
+                        <TextField layoutX="10.0" layoutY="85.0" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <Label layoutX="411.0" layoutY="263.0" prefHeight="42.0" prefWidth="48.0" text="Min">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField layoutX="479.0" layoutY="272.0" />
+    </children>
+</AnchorPane>

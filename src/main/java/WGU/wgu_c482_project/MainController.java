@@ -55,7 +55,7 @@ public class MainController implements Initializable {
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
         //create the new scene
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 650, 590);
         stage.setTitle("Modify Parts Menu");
 
         //set the scene on the stage
@@ -77,7 +77,7 @@ public class MainController implements Initializable {
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
         //create the new scene
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 1089, 590);
         stage.setTitle("Add Products Menu");
 
         //set the scene on the stage
@@ -94,7 +94,7 @@ public class MainController implements Initializable {
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
         //create the new scene
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 1089, 590);
         stage.setTitle("Modify Products Menu");
 
         //set the scene on the stage

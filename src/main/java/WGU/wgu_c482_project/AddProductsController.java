@@ -15,15 +15,18 @@ import java.util.ResourceBundle;
 
 public class AddProductsController implements Initializable {
 
-    @FXML
-    protected void onHelloButtonClick() {
-
-
-    }
-
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Add Products Scene Initialized eleheo");}
+    public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Add Products Scene Initialized");}
 
+    public void onSave(ActionEvent actionEvent) throws IOException{
+        System.out.println("Saved!");
+    }
+    public void onAdd(ActionEvent actionEvent) throws IOException{
+        System.out.println("Added!");
+    }
+    public void onRemove(ActionEvent actionEvent) throws IOException{
+        System.out.println("Removed!");
+    }
     public void toMain(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
         Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
