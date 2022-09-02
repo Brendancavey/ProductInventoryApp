@@ -8,11 +8,11 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
-public class InventorySystemApp extends Application {
+public class main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml")); //
-        Scene scene = new Scene(root, 320, 240);
+        Scene scene = new Scene(root, 919, 544);
         stage.setTitle("Part Details Menu");
         stage.setScene(scene);
         //stage.setFullScreen(true);
