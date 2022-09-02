@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="590.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WGU.wgu_c482_project.ModifyPartsController">
     <children>
-        <Button layoutX="479.0" layoutY="443.0" maxHeight="92.0" maxWidth="139.0" mnemonicParsing="false" onAction="#toMain" prefHeight="42.0" prefWidth="91.0" text="Cancel" />
+        <Button fx:id="cancelButton" layoutX="479.0" layoutY="443.0" maxHeight="92.0" maxWidth="139.0" mnemonicParsing="false" onAction="#toMain" prefHeight="42.0" prefWidth="91.0" text="Cancel" />
         <Button layoutX="366.0" layoutY="443.0" maxHeight="42.0" maxWidth="91.0" mnemonicParsing="false" onAction="#onSave" prefHeight="42.0" prefWidth="91.0" text="Save" />
         <HBox layoutX="45.0" layoutY="24.0" prefHeight="49.0" prefWidth="390.0" spacing="40.0">
             <children>
@@ -75,11 +75,11 @@
                 <VBox layoutX="10.0" layoutY="10.0" prefHeight="292.0" prefWidth="158.0" spacing="17.0">
                     <children>
                         <TextField disable="true" promptText="Auto-Gen. Disabled" />
-                        <TextField layoutX="10.0" layoutY="10.0" />
-                        <TextField layoutX="10.0" layoutY="35.0" />
-                        <TextField layoutX="10.0" layoutY="60.0" />
-                        <TextField layoutX="10.0" layoutY="85.0" />
-                        <TextField layoutX="10.0" layoutY="85.0" />
+                        <TextField fx:id="nameText" layoutX="10.0" layoutY="10.0" />
+                        <TextField fx:id="invText" layoutX="10.0" layoutY="35.0" />
+                        <TextField fx:id="priceText" layoutX="10.0" layoutY="60.0" />
+                        <TextField fx:id="maxText" layoutX="10.0" layoutY="85.0" />
+                        <TextField fx:id="machineIDText" layoutX="10.0" layoutY="85.0" />
                     </children>
                 </VBox>
             </children>
@@ -89,6 +89,6 @@
                 <Font size="18.0" />
             </font>
         </Label>
-        <TextField layoutX="479.0" layoutY="272.0" />
+        <TextField fx:id="minText" layoutX="479.0" layoutY="272.0" />
     </children>
 </AnchorPane>

@@ -119,7 +119,8 @@ public class MainController implements Initializable {
         stage.show();
     }
     public void onDeletePart(ActionEvent actionEvent) throws IOException{
-        System.out.println("Delete part was clicked!");
+        //System.out.println("Delete part was clicked!");
+        delete(1);
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////PRODUCT BUTTONS/////////////////////////////////////////////////////////
@@ -159,9 +160,26 @@ public class MainController implements Initializable {
     }
     public void onDeleteProduct(ActionEvent actionEvent) throws IOException{
         System.out.println("Delete part was clicked!");
+
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////HELPER METHODS//////////////////////////////////////////////////////////
+    public boolean delete(int id){
+        int index = -1;
+
+        for(Part item: Inventory.getAllParts()){
+            index += 1;
+            if(item.getId() == id){
+
+                return Inventory.getAllParts().remove(item);
+            }
+        }
+        return false;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////
     public void onActionExit(ActionEvent actionEvent) throws IOException {
         System.exit(0);
     }
+
+
 }
