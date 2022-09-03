@@ -18,6 +18,7 @@ import java.io.IOException;
 
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddPartsController implements Initializable {
@@ -102,20 +103,30 @@ public class AddPartsController implements Initializable {
         machineID.setText("Company Name");
     }
     public void toMain(ActionEvent actionEvent) throws IOException {
-        //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
 
-        //get the stage from an event's source widget
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu?");
+        alert.setTitle("Confirmation Message");
 
-        //create the new scene
-        Scene scene = new Scene(root, 919, 544);
-        stage.setTitle("Main Menu");
+        Optional<ButtonType> buttonClicked = alert.showAndWait();
 
-        //set the scene on the stage
-        stage.setScene(scene);
+        if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
+            //if the confirmation window ok button has been selected, continue to delete the selected item.
+            //load widget hierarchy of next screen
+            Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
 
-        //show the stage (raise the curtains)
-        stage.show();
+            //get the stage from an event's source widget
+            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+            //create the new scene
+            Scene scene = new Scene(root, 919, 544);
+            stage.setTitle("Main Menu");
+
+            //set the scene on the stage
+            stage.setScene(scene);
+
+            //show the stage (raise the curtains)
+            stage.show();
+        }
+
     }
 }
