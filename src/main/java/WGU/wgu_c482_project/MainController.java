@@ -4,6 +4,9 @@ package WGU.wgu_c482_project;
 import WGU.wgu_c482_project.model.Inventory;
 import WGU.wgu_c482_project.model.Part;
 import WGU.wgu_c482_project.model.Product;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -14,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.application.Application;
@@ -27,7 +31,7 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-    //////////////INITIALIZING PARTS TABLE VARIABLES///////////////////
+    //////////////INITIALIZING PARTS VARIABLES///////////////////
     @FXML
     private TableView<Part> partsTableView;
     @FXML
@@ -38,8 +42,11 @@ public class MainController implements Initializable {
     private TableColumn<Part, Integer> partsInvLevelCol;
     @FXML
     private TableColumn<Part, Double> partsPriceCol;
+    @FXML
+    private TextField partsFilterText;
+
     ///////////////////////////////////////////////////////
-    ////////////INITIALIZING PRODUCTS TABLE VARIABLES////////////////
+    ////////////INITIALIZING PRODUCTS VARIABLES////////////////
     @FXML
     private TableView<Product> productsTableView;
     @FXML
@@ -60,30 +67,46 @@ public class MainController implements Initializable {
         }
         return false;
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Main Menu Scene Initialized");
-        ///////////////TESTING OUT PARTS TABLE VIEW///////////////////////
-        //calls get method from Parts class that corresponds to the parameter
+        ///////////////INITIALIZING PARTS TABLE VIEW///////////////////////
+        //calls get-method from Parts class that corresponds to the parameter
         partsTableView.setItems(Inventory.getAllParts());
         partsIDCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         partsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         partsInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         /////////////////////////////////////////////////////////////////////
-        /////////////////////TESTING OUT PRODUCTS TABLE VIEW//////////////
+        /////////////////////INITIALIZING PRODUCTS TABLE VIEW//////////////
+        //calls get-method from Products class that corresponds to the parameter
         productsTableView.setItems((Inventory.getAllProducts()));
         productsIDCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         productsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         productsInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         productsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        if(search(4)){
+
+        ///////////////////////INITIALIZING SEARCH FILTER FUNCTION///////////////////////
+        partsFilterText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                //when the parts filter text field detects a change in text, set the table view
+                //to where helper method filter is called with the current filter text
+                //as the parameter
+                partsTableView.setItems(filter(partsFilterText.getText()));
+            }
+        });
+        //////////////////////////////////////////////////////////////////////////////////
+
+        /*if(search(2)){
             System.out.println("found 2!");
-        }
+        }*/
+
     }
 
-    /////////////////////////PARTS BUTTONS/////////////////////////////////////////////////////////////
+    /////////////////////////PARTS WIDGETS ACTIONS/////////////////////////////////////////////////////////////
     public void onAddPart(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
         Parent root = FXMLLoader.load(getClass().getResource("AddParts.fxml"));
@@ -123,7 +146,7 @@ public class MainController implements Initializable {
         delete(1);
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////PRODUCT BUTTONS/////////////////////////////////////////////////////////
+    //////////////////////////////PRODUCT WIDGETS ACTIONS/////////////////////////////////////////////////////////
     public void onAddProduct(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
         Parent root = FXMLLoader.load(getClass().getResource("AddProducts.fxml"));
@@ -175,6 +198,25 @@ public class MainController implements Initializable {
             }
         }
         return false;
+    }
+    public ObservableList<Part> filter(String partName){
+        //if the filtered parts list is not empty, it means that the user has queried a search previously,
+        //and the list needs to be cleared before searching again
+        if(!(Inventory.getAllFilteredParts()).isEmpty()){
+            Inventory.getAllFilteredParts().clear();
+        }
+        //if a part exists within inventory parts list that contains either a substring of the part name or,
+        //if the ID is equivalent to the inserted parameter, then add that part to the filteredParts list
+        for(Part part : Inventory.getAllParts()){
+            if((part.getName().contains(partName)) || Integer.toString(part.getId()).contains(partName)){
+                Inventory.getAllFilteredParts().add(part);
+            }
+        }
+        //if the filter did not add any parts to the filtered list, then return the normal list
+        if(Inventory.getAllFilteredParts().isEmpty()){
+            return Inventory.getAllParts();
+        }
+        return Inventory.getAllFilteredParts();
     }
     ////////////////////////////////////////////////////////////////////////////////////////
     public void onActionExit(ActionEvent actionEvent) throws IOException {

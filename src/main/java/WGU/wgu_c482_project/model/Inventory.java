@@ -7,6 +7,8 @@ public class Inventory {
     private static ObservableList<Part> allParts = FXCollections.observableArrayList();
     private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
+    private static ObservableList<Part> allFilteredParts = FXCollections.observableArrayList();
+
     public int newPartID = 1;
     private int newProductID = 1;
     /*public static void incrementPartID(){
@@ -26,6 +28,9 @@ public class Inventory {
     }
     public static ObservableList<Part> getAllParts(){
         return allParts;
+    }
+    public static ObservableList<Part> getAllFilteredParts(){
+        return allFilteredParts;
     }
     ////////////////////////////////////////////////
     //////////////PRODUCT METHODS//////////////////
