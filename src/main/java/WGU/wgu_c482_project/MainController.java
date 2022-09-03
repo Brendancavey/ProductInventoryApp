@@ -57,6 +57,8 @@ public class MainController implements Initializable {
     private TableColumn<Product, Integer> productsInvLevelCol;
     @FXML
     private TableColumn<Product, Double> productsPriceCol;
+    @FXML
+    private TextField productsFilterText;
     /////////////////////////////////////////////////////////
 
     public boolean search(int id){
@@ -88,14 +90,20 @@ public class MainController implements Initializable {
         productsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
 
-        ///////////////////////INITIALIZING SEARCH FILTER FUNCTION///////////////////////
+        ///////////////////////INITIALIZING SEARCH FILTER FUNCTIONs///////////////////////
         partsFilterText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 //when the parts filter text field detects a change in text, set the table view
                 //to where helper method filter is called with the current filter text
                 //as the parameter
-                partsTableView.setItems(filter(partsFilterText.getText()));
+                partsTableView.setItems(filterPart(partsFilterText.getText()));
+            }
+        });
+        productsFilterText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                productsTableView.setItems(filterProduct(productsFilterText.getText()));
             }
         });
         //////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +207,7 @@ public class MainController implements Initializable {
         }
         return false;
     }
-    public ObservableList<Part> filter(String partName){
+    public ObservableList<Part> filterPart(String partName){
         //if the filtered parts list is not empty, it means that the user has queried a search previously,
         //and the list needs to be cleared before searching again
         if(!(Inventory.getAllFilteredParts()).isEmpty()){
@@ -217,6 +225,25 @@ public class MainController implements Initializable {
             return Inventory.getAllParts();
         }
         return Inventory.getAllFilteredParts();
+    }
+    public ObservableList<Product> filterProduct(String productName){
+        //if the filtered product list is not empty, it means that the user has queried a search previously,
+        //and the list needs to be cleared before searching again
+        if(!(Inventory.getAllFilteredProducts()).isEmpty()){
+            Inventory.getAllFilteredProducts().clear();
+        }
+        //if a product exists within inventory products list that contains either a substring of the part name or,
+        //if the ID is equivalent to the inserted parameter, then add that part to the filteredProducts list
+        for(Product product : Inventory.getAllProducts()){
+            if((product.getName().contains(productName)) || Integer.toString(product.getId()).contains(productName)){
+                Inventory.getAllFilteredProducts().add(product);
+            }
+        }
+        //if the filter did not add any products to the filtered list, then return the normal list
+        if(Inventory.getAllFilteredProducts().isEmpty()){
+            return Inventory.getAllProducts();
+        }
+        return Inventory.getAllFilteredProducts();
     }
     ////////////////////////////////////////////////////////////////////////////////////////
     public void onActionExit(ActionEvent actionEvent) throws IOException {

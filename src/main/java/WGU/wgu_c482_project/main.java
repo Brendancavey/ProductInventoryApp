@@ -29,11 +29,13 @@ public class main extends Application {
         InHousePart pencil = new InHousePart(3, "Pencil", 100.00, 99, 98, 1000, 4432);
 
         Product cup = new Product(10, "cup", 2.00, 8, 1, 21);
+        Product jello = new Product(5,"jello", 7.80, 2, 1, 5);
 
         Inventory.addPart(hammer);
         Inventory.addPart(screw);
         Inventory.addPart(pencil);
         Inventory.addProduct(cup);
+        Inventory.addProduct(jello);
 
 
 

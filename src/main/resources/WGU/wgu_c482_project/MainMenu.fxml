@@ -89,7 +89,7 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <TextField promptText="Search by ID or Name" />
+                  <TextField fx:id="productsFilterText" promptText="Search by ID or Name" />
                </children>
             </HBox>
          </children>
