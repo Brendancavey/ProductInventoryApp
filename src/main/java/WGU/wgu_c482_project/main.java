@@ -1,9 +1,6 @@
 package WGU.wgu_c482_project;
 
-import WGU.wgu_c482_project.model.InHousePart;
-import WGU.wgu_c482_project.model.Inventory;
-import WGU.wgu_c482_project.model.Part;
-import WGU.wgu_c482_project.model.Product;
+import WGU.wgu_c482_project.model.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -31,11 +28,14 @@ public class main extends Application {
         Product cup = new Product(10, "cup", 2.00, 8, 1, 21);
         Product jello = new Product(5,"jello", 7.80, 2, 1, 5);
 
+        OutsourcedPart glue = new OutsourcedPart(99, "glue", 200.00, 1, 1,1, "gluegone");
+
         Inventory.addPart(hammer);
         Inventory.addPart(screw);
         Inventory.addPart(pencil);
         Inventory.addProduct(cup);
         Inventory.addProduct(jello);
+        Inventory.addPart(glue);
 
 
 

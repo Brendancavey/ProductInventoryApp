@@ -133,8 +133,20 @@ public class MainController implements Initializable {
         stage.show();
     }
     public void onModifyPart(ActionEvent actionEvent) throws IOException {
+
+        //create fxml loader object to let loader object know which scene to view
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("ModifyParts.fxml"));
+        loader.load();
+
+        //allowing fxml loader know which controller to use. The controller allows the use of any
+        //public methods within modify parts controller file
+        ModifyPartsController mpcController = loader.getController();
+        //pass information from current controller to modifyPartsController using getSelection method
+        mpcController.sendPartInformation(partsTableView.getSelectionModel().getSelectedItem());
+
         //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("ModifyParts.fxml"));
+        Parent root = loader.getRoot();
 
         //get the stage from an event's source widget
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -146,8 +158,11 @@ public class MainController implements Initializable {
         //set the scene on the stage
         stage.setScene(scene);
 
-        //show the stage (raise the curtains)
-        stage.show();
+        //show the stage (raise the curtains) and wait meaning any code executed after this
+        //will only be executed after switching back to previous scene
+        stage.showAndWait();
+
+
     }
     public void onDeletePart(ActionEvent actionEvent) throws IOException{
         //System.out.println("Delete part was clicked!");
@@ -245,6 +260,7 @@ public class MainController implements Initializable {
         }
         return Inventory.getAllFilteredProducts();
     }
+
     ////////////////////////////////////////////////////////////////////////////////////////
     public void onActionExit(ActionEvent actionEvent) throws IOException {
         System.exit(0);

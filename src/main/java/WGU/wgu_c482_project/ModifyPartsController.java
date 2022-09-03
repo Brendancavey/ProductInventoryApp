@@ -35,6 +35,7 @@ public class ModifyPartsController implements Initializable {
     public TextField minText;
     public TextField maxText;
     public TextField machineIDText;
+    public TextField IDText;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Modify Parts Scene Initialized");}
@@ -105,5 +106,27 @@ public class ModifyPartsController implements Initializable {
 
         //show the stage (raise the curtains)
         stage.show();
+    }
+
+    public void sendPartInformation(Part part){
+        IDText.setText(String.valueOf(part.getId()));
+        nameText.setText(part.getName());
+        priceText.setText(String.valueOf(part.getPrice()));
+        invText.setText(String.valueOf(part.getStock()));
+        minText.setText(String.valueOf(part.getMin()));
+        maxText.setText(String.valueOf(part.getMax()));
+        //machineIDText.setText(String.valueOf(part.getMachineID()));
+        if(part instanceof InHousePart){
+            machineIDText.setText(String.valueOf(((InHousePart)part).getMachineID()));
+            inHouse.fire();
+        }
+        else if(part instanceof OutsourcedPart){
+            //machineIDText is the name of the text field even though I am getting the company name
+            //due to the outsourced part.
+            machineIDText.setText(((OutsourcedPart)part).getCompanyName());
+            outsourced.fire();
+        }
+
+
     }
 }

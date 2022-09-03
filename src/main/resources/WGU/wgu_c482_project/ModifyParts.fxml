@@ -74,7 +74,7 @@
                 </VBox>
                 <VBox layoutX="10.0" layoutY="10.0" prefHeight="292.0" prefWidth="158.0" spacing="17.0">
                     <children>
-                        <TextField disable="true" promptText="Auto-Gen. Disabled" />
+                        <TextField fx:id="IDText" disable="true" promptText="Auto-Gen. Disabled" />
                         <TextField fx:id="nameText" layoutX="10.0" layoutY="10.0" />
                         <TextField fx:id="invText" layoutX="10.0" layoutY="35.0" />
                         <TextField fx:id="priceText" layoutX="10.0" layoutY="60.0" />
