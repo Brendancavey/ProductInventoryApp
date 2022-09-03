@@ -43,32 +43,41 @@ public class AddPartsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Add Parts Scene Initialized");}
 
     public void onSave(ActionEvent actionEvent) throws IOException{
-        boolean inHouseSelected = true;
-        if(inHouse.isSelected()){
-            inHouseSelected = true;
-        }
-        else if(outsourced.isSelected()){
-            inHouseSelected = false;
-        }
-        int id = 1;
-        String name = nameText.getText();
-        double price = Double.parseDouble(priceText.getText());
-        int stock = Integer.parseInt(invText.getText());
-        int min = Integer.parseInt(minText.getText());
-        int max = Integer.parseInt(maxText.getText());
+
+        try{
+            boolean inHouseSelected = true;
+            if(inHouse.isSelected()){
+                inHouseSelected = true;
+            }
+            else if(outsourced.isSelected()){
+                inHouseSelected = false;
+            }
+            int id = 1;
+            String name = nameText.getText();
+            double price = Double.parseDouble(priceText.getText());
+            int stock = Integer.parseInt(invText.getText());
+            int min = Integer.parseInt(minText.getText());
+            int max = Integer.parseInt(maxText.getText());
 
 
-        if (inHouseSelected == true) {
-            int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or outsourced
-            Inventory.addPart(new InHousePart(id, name, price, stock, min, max, machineID));
-        }
-        else if (inHouseSelected == false){
-            String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
-            Inventory.addPart(new OutsourcedPart(id, name, price, stock, min, max, machineID));
+            if (inHouseSelected == true) {
+                int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or outsourced
+                Inventory.addPart(new InHousePart(id, name, price, stock, min, max, machineID));
+            }
+            else if (inHouseSelected == false){
+                String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
+                Inventory.addPart(new OutsourcedPart(id, name, price, stock, min, max, machineID));
+
+            }
+            //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
+            cancelButton.fireEvent(new ActionEvent());
+        }catch(NumberFormatException e){
+            System.out.println("Enter valid values in the provided text field. Thanks!");
+            System.out.println("Exception: " + e);
 
         }
-        //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
-        cancelButton.fireEvent(new ActionEvent());
+
+
 
     }
     public void onInHouse(ActionEvent actionEvent) throws IOException{

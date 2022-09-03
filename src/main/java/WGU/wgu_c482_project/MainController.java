@@ -160,7 +160,8 @@ public class MainController implements Initializable {
 
         //show the stage (raise the curtains) and wait meaning any code executed after this
         //will only be executed after switching back to previous scene
-        stage.showAndWait();
+        //stage.showAndWait();
+        stage.show();
 
 
     }
