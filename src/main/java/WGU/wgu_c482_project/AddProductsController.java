@@ -28,6 +28,7 @@ public class AddProductsController implements Initializable {
     public TextField maxText;
     ////////////////////////////////////////////////////////////////////////
     ///////////////////SEARCH FILTER TEXT FIELD////////////////////////////
+    @FXML
     private TextField partsFilterText;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////PARTS TABLE VIEW////////////////////////////////////
@@ -67,13 +68,9 @@ public class AddProductsController implements Initializable {
     Product newProduct = new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
     ///////////////////////////////////////////////////////////////////////
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add Products Scene Initialized");
-
-
         ///////////////INITIALIZING PARTS TABLE VIEW///////////////////////
         //calls get-method from Parts class that corresponds to the parameter
         partsTableView.setItems(Inventory.getAllParts());
@@ -89,7 +86,7 @@ public class AddProductsController implements Initializable {
         linkedInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         linkedPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         /////////////////////INITIALIZING SEARCH FILTER FUNCTION//////////////
-       /* partsFilterText.textProperty().addListener(new ChangeListener<String>() {
+       partsFilterText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 //when the parts filter text field detects a change in text, set the table view
@@ -97,7 +94,7 @@ public class AddProductsController implements Initializable {
                 //as the parameter
                 partsTableView.setItems(MainController.filterPart(partsFilterText.getText()));
             }
-        });*/
+        });
     }
 
     public void onSave(ActionEvent actionEvent) throws IOException{
@@ -148,16 +145,35 @@ public class AddProductsController implements Initializable {
         }
     }
     public void onAdd(ActionEvent actionEvent) throws IOException{
-        //partsTableView.getSelectionModel().getSelectedItem().getId()
-        newProduct.addAssociatedPart((Part) partsTableView.getSelectionModel().getSelectedItem());
-        System.out.println("Added!");
+        //create temporary part to be used as the selected part to add to associated part list
+        Part selectPart = (Part) partsTableView.getSelectionModel().getSelectedItem();
+        if(selectPart == null){return;}
+        else{
+            newProduct.addAssociatedPart(selectPart);
+            System.out.println("Added!");
+        }
+
     }
     public void onRemove(ActionEvent actionEvent) throws IOException{
-        System.out.println("Removed!");
+        //create a temporary part to be used as the selected associated part
         Part selectedAssociatedPart = (Part)associatedPartsTableView.getSelectionModel().getSelectedItem();
-
+        //if nothing is selected, no need to pop up confirmation window
         if(selectedAssociatedPart == null){return;}
-        newProduct.deleteAssociatedPart(selectedAssociatedPart);
+        //else if something is selected, confirm with user if the selected item is to be deleted.
+        else{
+            System.out.println("Removed!");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this associated part?");
+            alert.setTitle("Confirmation Message");
+
+            Optional<ButtonType> buttonClicked = alert.showAndWait();
+
+            if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
+                //if the confirmation window ok button has been selected, continue to delete the selected item.
+                //call delete associated part to find matching ID to the selected associated part. If matching ID is found,
+                //then the associated part is removed from the associated part list
+                newProduct.deleteAssociatedPart(selectedAssociatedPart);
+            }
+        }
     }
     public void toMain(ActionEvent actionEvent) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu?");
