@@ -59,14 +59,6 @@ public class MainController implements Initializable {
     private TextField productsFilterText;
     /////////////////////////////////////////////////////////
 
-    public boolean search(int id){
-        for(Part part : Inventory.getAllParts()){
-            if(part.getId() == id){
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -127,35 +119,43 @@ public class MainController implements Initializable {
         stage.show();
     }
     public void onModifyPart(ActionEvent actionEvent) throws IOException {
+        try{
+            //create fxml loader object to let loader object know which scene to view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("ModifyParts.fxml"));
+            loader.load();
 
-        //create fxml loader object to let loader object know which scene to view
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("ModifyParts.fxml"));
-        loader.load();
+            //allowing fxml loader know which controller to use. The controller allows the use of any
+            //public methods within modify parts controller file
+            ModifyPartsController mpcController = loader.getController();
+            //pass information from current controller to modifyPartsController using getSelection method
+            mpcController.sendPartInformation(partsTableView.getSelectionModel().getSelectedItem());
 
-        //allowing fxml loader know which controller to use. The controller allows the use of any
-        //public methods within modify parts controller file
-        ModifyPartsController mpcController = loader.getController();
-        //pass information from current controller to modifyPartsController using getSelection method
-        mpcController.sendPartInformation(partsTableView.getSelectionModel().getSelectedItem());
+            //load widget hierarchy of next screen
+            Parent root = loader.getRoot();
 
-        //load widget hierarchy of next screen
-        Parent root = loader.getRoot();
+            //get the stage from an event's source widget
+            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
-        //get the stage from an event's source widget
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            //create the new scene
+            Scene scene = new Scene(root, 650, 590);
+            stage.setTitle("Modify Parts Menu");
 
-        //create the new scene
-        Scene scene = new Scene(root, 650, 590);
-        stage.setTitle("Modify Parts Menu");
+            //set the scene on the stage
+            stage.setScene(scene);
 
-        //set the scene on the stage
-        stage.setScene(scene);
+            //show the stage (raise the curtains) and wait meaning any code executed after this
+            //will only be executed after switching back to previous scene
+            //stage.showAndWait();
+            stage.show();
+        //if no selection was made, throw an error message to select an item
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Select the item you would like to modify.");
+            alert.showAndWait();
+        }
 
-        //show the stage (raise the curtains) and wait meaning any code executed after this
-        //will only be executed after switching back to previous scene
-        //stage.showAndWait();
-        stage.show();
 
 
     }
@@ -235,7 +235,7 @@ public class MainController implements Initializable {
         }
         return false;
     }
-    public ObservableList<Part> filterPart(String partName){
+    public static ObservableList<Part> filterPart(String partName){
         //if the filtered parts list is not empty, it means that the user has queried a search previously,
         //and the list needs to be cleared before searching again
         if(!(Inventory.getAllFilteredParts()).isEmpty()){
@@ -272,6 +272,15 @@ public class MainController implements Initializable {
             return Inventory.getAllProducts();
         }
         return Inventory.getAllFilteredProducts();
+    }
+
+    public boolean search(int id){
+        for(Part part : Inventory.getAllParts()){
+            if(part.getId() == id){
+                return true;
+            }
+        }
+        return false;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////

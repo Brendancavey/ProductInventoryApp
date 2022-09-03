@@ -57,10 +57,10 @@
             <VBox layoutX="10.0" layoutY="10.0" prefHeight="292.0" prefWidth="158.0" spacing="17.0">
                <children>
                   <TextField disable="true" promptText="Auto-Gen. Disabled" />
-                  <TextField layoutX="10.0" layoutY="10.0" />
-                  <TextField layoutX="10.0" layoutY="35.0" />
-                  <TextField layoutX="10.0" layoutY="60.0" prefHeight="25.0" prefWidth="127.0" />
-                  <TextField layoutX="10.0" layoutY="85.0" prefHeight="25.0" prefWidth="129.0" />
+                  <TextField fx:id="nameText" layoutX="10.0" layoutY="10.0" />
+                  <TextField fx:id="invText" layoutX="10.0" layoutY="35.0" />
+                  <TextField fx:id="priceText" layoutX="10.0" layoutY="60.0" prefHeight="25.0" prefWidth="127.0" />
+                  <TextField fx:id="maxText" layoutX="10.0" layoutY="85.0" prefHeight="25.0" prefWidth="129.0" />
                </children>
             </VBox>
          </children>
@@ -70,13 +70,13 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField layoutX="479.0" layoutY="272.0" prefHeight="25.0" prefWidth="81.0" />
-      <TableView layoutX="616.0" layoutY="49.0" prefHeight="224.0" prefWidth="393.0">
+      <TextField fx:id="minText" layoutX="479.0" layoutY="272.0" prefHeight="25.0" prefWidth="81.0" />
+      <TableView fx:id="partsTableView" layoutX="616.0" layoutY="49.0" prefHeight="224.0" prefWidth="393.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Part ID" />
-          <TableColumn prefWidth="75.0" text="Part Name" />
-            <TableColumn prefWidth="110.0" text="Inventory Level" />
-            <TableColumn prefWidth="132.0" text="Price/ Cost per Unit" />
+          <TableColumn fx:id="partsIDCol" prefWidth="75.0" text="Part ID" />
+          <TableColumn fx:id="partsNameCol" prefWidth="75.0" text="Part Name" />
+            <TableColumn fx:id="partsInvLevelCol" prefWidth="110.0" text="Inventory Level" />
+            <TableColumn fx:id="partsPriceCol" prefWidth="132.0" text="Price/ Cost per Unit" />
         </columns>
       </TableView>
       <TableView layoutX="616.0" layoutY="317.0" prefHeight="224.0" prefWidth="393.0">
@@ -89,6 +89,6 @@
       </TableView>
       <Button layoutX="939.0" layoutY="283.0" mnemonicParsing="false" onAction="#onAdd" text="Add" />
       <Button layoutX="837.0" layoutY="551.0" mnemonicParsing="false" onAction="#onRemove" prefHeight="25.0" prefWidth="158.0" text="Remove Associated Part" />
-      <TextField layoutX="816.0" layoutY="24.0" prefHeight="25.0" prefWidth="193.0" promptText="Search by Product ID or Name" />
+      <TextField fx:id="partsFilterText" layoutX="816.0" layoutY="24.0" prefHeight="25.0" prefWidth="193.0" promptText="Search by Product ID or Name" />
    </children>
 </AnchorPane>

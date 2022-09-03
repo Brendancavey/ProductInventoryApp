@@ -51,7 +51,7 @@ public class AddPartsController implements Initializable {
             else if(outsourced.isSelected()){
                 inHouseSelected = false;
             }
-            int id = 1;
+            int id = Inventory.newPartID; //newPartId will increment at the end of the function call to ensure each id is unique
             String name = nameText.getText();
             double price = Double.parseDouble(priceText.getText());
             int stock = Integer.parseInt(invText.getText());
@@ -68,6 +68,7 @@ public class AddPartsController implements Initializable {
             }
             else{
                 if (inHouseSelected == true) {
+
                     int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or outsourced
                     Inventory.addPart(new InHousePart(id, name, price, stock, min, max, machineID));
                 }
@@ -76,8 +77,16 @@ public class AddPartsController implements Initializable {
                     Inventory.addPart(new OutsourcedPart(id, name, price, stock, min, max, machineID));
 
                 }
+                Inventory.incrementPartID(); //increment partID if save was successfull
                 //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
-                cancelButton.fireEvent(new ActionEvent());
+                //cancelButton.fireEvent(new ActionEvent());
+                //Goes back to main menu. Running off of cancel button triggers alert. Don't want that.
+                Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
+                Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root, 919, 544);
+                stage.setTitle("Main Menu");
+                stage.setScene(scene);
+                stage.show();
             }
 
         //if invalid entries are entered into text field, pop up window claiming values are invalid
