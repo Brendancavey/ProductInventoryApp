@@ -9,15 +9,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.application.Application;
@@ -27,6 +24,7 @@ import java.io.IOException;
 
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -166,8 +164,26 @@ public class MainController implements Initializable {
 
     }
     public void onDeletePart(ActionEvent actionEvent) throws IOException{
-        //System.out.println("Delete part was clicked!");
-        delete(1);
+        //try to delete, but catch the error if user attempts to delete an item without first selecting the item to delete.
+        try {
+            //if the user does select a valid item to delete, show a confirmation window with the ID of the selected item to confirm.
+            int idToDelete = partsTableView.getSelectionModel().getSelectedItem().getId();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete item with ID: " + (idToDelete) + "?");
+            alert.setTitle("Confirmation Message");
+
+            Optional<ButtonType> buttonClicked = alert.showAndWait();
+
+            if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
+                //if the confirmation window ok button has been selected, continue to delete the selected item.
+                delete(idToDelete);
+            }
+        //if the user does not select an item and attempts to delete, then delete function causes a nullpointer exception error
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Select the item you would like to delete.");
+            alert.showAndWait();
+        }
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////PRODUCT WIDGETS ACTIONS/////////////////////////////////////////////////////////

@@ -10,10 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 
@@ -45,6 +42,7 @@ public class AddPartsController implements Initializable {
     public void onSave(ActionEvent actionEvent) throws IOException{
 
         try{
+            //boolean used to verify which radio button was selected to create the correct object
             boolean inHouseSelected = true;
             if(inHouse.isSelected()){
                 inHouseSelected = true;
@@ -59,21 +57,36 @@ public class AddPartsController implements Initializable {
             int min = Integer.parseInt(minText.getText());
             int max = Integer.parseInt(maxText.getText());
 
-
-            if (inHouseSelected == true) {
-                int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or outsourced
-                Inventory.addPart(new InHousePart(id, name, price, stock, min, max, machineID));
+            //verifying logical errors are in order so that max value cannot be less than min value.
+            if (max < min){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setContentText("Max value is less than min value. Please correct this before saving.");
+                alert.showAndWait();
+                //System.out.println("Max value is less than min value. Please correct before saving.");
             }
-            else if (inHouseSelected == false){
-                String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
-                Inventory.addPart(new OutsourcedPart(id, name, price, stock, min, max, machineID));
+            else{
+                if (inHouseSelected == true) {
+                    int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or outsourced
+                    Inventory.addPart(new InHousePart(id, name, price, stock, min, max, machineID));
+                }
+                else if (inHouseSelected == false){
+                    String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
+                    Inventory.addPart(new OutsourcedPart(id, name, price, stock, min, max, machineID));
 
+                }
+                //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
+                cancelButton.fireEvent(new ActionEvent());
             }
-            //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
-            cancelButton.fireEvent(new ActionEvent());
+
+        //if invalid entries are entered into text field, pop up window claiming values are invalid
         }catch(NumberFormatException e){
-            System.out.println("Enter valid values in the provided text field. Thanks!");
-            System.out.println("Exception: " + e);
+            //System.out.println("Enter valid values in the provided text field. Thanks!");
+            //System.out.println("Exception: " + e);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Enter valid values in the provided text fields. Thanks!");
+            alert.showAndWait();
 
         }
 
