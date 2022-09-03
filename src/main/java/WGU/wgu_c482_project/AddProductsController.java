@@ -20,18 +20,19 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddProductsController implements Initializable {
-
+    //////////////////////INITIALIZING PRODUCT TEXTFIELDS///////////////////
     public TextField nameText;
     public TextField priceText;
     public TextField invText;
     public TextField minText;
     public TextField maxText;
-
+    ////////////////////////////////////////////////////////////////////////
+    ///////////////////SEARCH FILTER TEXT FIELD////////////////////////////
     private TextField partsFilterText;
-
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////PARTS TABLE VIEW////////////////////////////////////
     @FXML
     private TableView partsTableView;
-
     @FXML
     private TableColumn<Part, Integer> partsIDCol;
     @FXML
@@ -40,9 +41,38 @@ public class AddProductsController implements Initializable {
     private TableColumn<Part, Integer> partsInvLevelCol;
     @FXML
     private TableColumn<Part, Double> partsPriceCol;
+    //////////////////////////////////////////////////////////////////////
+    //////////////////ASSOCIATED PARTS TABLE VIEW////////////////////////
+    @FXML
+    private TableView associatedPartsTableView;
+    @FXML
+    private TableColumn<Part, Integer> linkedPartsIDCol;
+    @FXML
+    private TableColumn<Part, String> linkedPartsNameCol;
+    @FXML
+    private TableColumn<Part, Integer> linkedInvLevelCol;
+    @FXML
+    private TableColumn<Part, Double> linkedPriceCol;
+    /////////////////////////////////////////////////////////////////////
+    ////////////////CREATING NEW PRODUCT OBJECT////////////////////////////
+    //initializing new product to use for creating associated parts list. Associated
+    //instance variables will be set when product is saved. If the product is canceled and not saved
+    //then newProduct is unused and will get picked up by garbage collection
+    int defaultID = -1;
+    String defaultString = ".";
+    double defaultPrice = 1.00;
+    int defaultStock = 0;
+    int defaultMin = 0;
+    int defaultMax = 1;
+    Product newProduct = new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
+    ///////////////////////////////////////////////////////////////////////
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add Products Scene Initialized");
+
 
         ///////////////INITIALIZING PARTS TABLE VIEW///////////////////////
         //calls get-method from Parts class that corresponds to the parameter
@@ -52,6 +82,12 @@ public class AddProductsController implements Initializable {
         partsInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         /////////////////////////////////////////////////////////////////////
+        /////////////////////INITIALIZING ASSOCIATED PARTS TABLE VIEW///////////
+        associatedPartsTableView.setItems(newProduct.getAllAssociatedParts());
+        linkedPartsIDCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        linkedPartsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        linkedInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        linkedPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         /////////////////////INITIALIZING SEARCH FILTER FUNCTION//////////////
        /* partsFilterText.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -67,7 +103,7 @@ public class AddProductsController implements Initializable {
     public void onSave(ActionEvent actionEvent) throws IOException{
         try{
 
-            int id = Inventory.newPartID; //newPartId will increment at the end of the function call to ensure each id is unique
+            int id = Inventory.newProductID; //newPartId will increment at the end of the function call to ensure each id is unique
             String name = nameText.getText();
             double price = Double.parseDouble(priceText.getText());
             int stock = Integer.parseInt(invText.getText());
@@ -83,9 +119,15 @@ public class AddProductsController implements Initializable {
                 //System.out.println("Max value is less than min value. Please correct before saving.");
             }
             else{
-                Inventory.addProduct(new Product(id, name, price, stock, min, max));
+                newProduct.setId(id);
+                newProduct.setName(name);
+                newProduct.setPrice(price);
+                newProduct.setStock(stock);
+                newProduct.setMin(min);
+                newProduct.setMax(max);
+                Inventory.addProduct(newProduct);
 
-                Inventory.incrementPartID(); //increment partID if save was successfull
+                Inventory.incrementProductID(); //increment partID if save was successfull
                 //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
                 //cancelButton.fireEvent(new ActionEvent());
                 //Goes back to main menu. Running off of cancel button triggers alert. Don't want that.
@@ -106,10 +148,16 @@ public class AddProductsController implements Initializable {
         }
     }
     public void onAdd(ActionEvent actionEvent) throws IOException{
+        //partsTableView.getSelectionModel().getSelectedItem().getId()
+        newProduct.addAssociatedPart((Part) partsTableView.getSelectionModel().getSelectedItem());
         System.out.println("Added!");
     }
     public void onRemove(ActionEvent actionEvent) throws IOException{
         System.out.println("Removed!");
+        Part selectedAssociatedPart = (Part)associatedPartsTableView.getSelectionModel().getSelectedItem();
+
+        if(selectedAssociatedPart == null){return;}
+        newProduct.deleteAssociatedPart(selectedAssociatedPart);
     }
     public void toMain(ActionEvent actionEvent) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu?");

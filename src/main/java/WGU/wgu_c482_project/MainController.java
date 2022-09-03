@@ -224,6 +224,8 @@ public class MainController implements Initializable {
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////HELPER METHODS//////////////////////////////////////////////////////////
     public boolean delete(int id){
+        //iterate through parts list. If the parameter ID matches
+        //with an id found in parts list, remove that item
         int index = -1;
 
         for(Part item: Inventory.getAllParts()){

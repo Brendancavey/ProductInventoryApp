@@ -79,12 +79,12 @@
             <TableColumn fx:id="partsPriceCol" prefWidth="132.0" text="Price/ Cost per Unit" />
         </columns>
       </TableView>
-      <TableView layoutX="616.0" layoutY="317.0" prefHeight="224.0" prefWidth="393.0">
+      <TableView fx:id="associatedPartsTableView" layoutX="616.0" layoutY="317.0" prefHeight="224.0" prefWidth="393.0">
          <columns>
-            <TableColumn prefWidth="75.0" text="Part ID" />
-            <TableColumn prefWidth="75.0" text="Part Name" />
-            <TableColumn prefWidth="110.0" text="Inventory Level" />
-            <TableColumn prefWidth="132.0" text="Price/ Cost per Unit" />
+            <TableColumn fx:id="linkedPartsIDCol" prefWidth="75.0" text="Part ID" />
+            <TableColumn fx:id="linkedPartsNameCol" prefWidth="75.0" text="Part Name" />
+            <TableColumn fx:id="linkedInvLevelCol" prefWidth="110.0" text="Inventory Level" />
+            <TableColumn fx:id="linkedPriceCol" prefWidth="132.0" text="Price/ Cost per Unit" />
          </columns>
       </TableView>
       <Button layoutX="939.0" layoutY="283.0" mnemonicParsing="false" onAction="#onAdd" text="Add" />

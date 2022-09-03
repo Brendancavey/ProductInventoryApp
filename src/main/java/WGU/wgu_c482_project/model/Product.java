@@ -79,6 +79,16 @@ public class Product {
         associatedParts.add(part);
     }
     public boolean deleteAssociatedPart(Part selectedAssociatedPart){
-        return true; //?
+        //iterate through associatedParts list. If the selected associated parts ID matches
+        //with an id found in associated parts list, remove that item
+        int index = -1;
+        for(Part item: associatedParts){
+            index += 1;
+            if(item.getId() == selectedAssociatedPart.getId()){
+
+                return associatedParts.remove(item);
+            }
+        }
+        return false;
     }
 }
