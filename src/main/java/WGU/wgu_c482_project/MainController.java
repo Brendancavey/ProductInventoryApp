@@ -250,16 +250,25 @@ public class MainController implements Initializable {
     public void onDeleteProduct(ActionEvent actionEvent) throws IOException{
         //try to delete, but catch the error if user attempts to delete an item without first selecting the item to delete.
         try {
-            //if the user does select a valid item to delete, show a confirmation window with the ID of the selected item to confirm.
-            int idToDelete = productsTableView.getSelectionModel().getSelectedItem().getId();
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete item with ID: " + (idToDelete) + "?");
-            alert.setTitle("Confirmation Message");
+            //will only show confirmation window to delete if the size of the associated part lists of the selected product is equal to 0
+            if (productsTableView.getSelectionModel().getSelectedItem().getAllAssociatedParts().size() == 0) {
+                //if the user does select a valid item to delete, show a confirmation window with the ID of the selected item to confirm.
+                int idToDelete = productsTableView.getSelectionModel().getSelectedItem().getId();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete item with ID: " + (idToDelete) + "?");
+                alert.setTitle("Confirmation Message");
 
-            Optional<ButtonType> buttonClicked = alert.showAndWait();
+                Optional<ButtonType> buttonClicked = alert.showAndWait();
 
-            if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
-                //if the confirmation window ok button has been selected, continue to delete the selected item.
-                deleteProduct(idToDelete);
+                if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
+                    //if the confirmation window ok button has been selected, continue to delete the selected item.
+                    deleteProduct(idToDelete);
+                }
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning Message");
+                alert.setContentText("Will not delete selected product until all associated parts are removed from product.");
+                alert.showAndWait();
             }
             //if the user does not select an item and attempts to delete, then delete function causes a nullpointer exception error
         }catch(NullPointerException e){
