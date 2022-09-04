@@ -51,6 +51,7 @@ public class MainController implements Initializable {
     @FXML
     private TextField partsFilterText;
 
+
     ///////////////////////////////////////////////////////
     ////////////INITIALIZING PRODUCTS VARIABLES////////////////
     @FXML
@@ -96,6 +97,7 @@ public class MainController implements Initializable {
                 //to where helper method filter is called with the current filter text
                 //as the parameter
                 partsTableView.setItems(filterPart(partsFilterText.getText()));
+
             }
         });
         productsFilterText.textProperty().addListener(new ChangeListener<String>() {
@@ -189,6 +191,18 @@ public class MainController implements Initializable {
             alert.showAndWait();
         }
     }
+    public void onSearchPart(ActionEvent actionEvent) throws IOException{
+        System.out.println("Searching...");
+        //filterPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
+        //press the enter button
+        if(filterPart(partsFilterText.getText()) == Inventory.getAllParts()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Unable to find any items within search parameters");
+            alert.showAndWait();
+        }
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////PRODUCT WIDGETS ACTIONS/////////////////////////////////////////////////////////
     public void onAddProduct(ActionEvent actionEvent) throws IOException {
@@ -283,31 +297,73 @@ public class MainController implements Initializable {
         }
 
     }
+    public void onSearchProduct(ActionEvent actionEvent) throws IOException{
+        System.out.println("Searching...");
+        //filterProduct returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchProduct or
+        //press the enter button
+        if(filterProduct(productsFilterText.getText()) == Inventory.getAllProducts()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Unable to find any items within search parameters");
+            alert.showAndWait();
+        }
+    }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////HELPER METHODS//////////////////////////////////////////////////////////
     public boolean deletePart(int id){ //deletes an item from parts list
         //iterate through parts list. If the parameter ID matches
         //with an id found in parts list, remove that item
         int index = -1;
+        int i = -1;
+        //need to verify from where does the user want to delete the part item. If it is from a filtered search list,
+        //then need to delete the item from both the filtered search list and normal list since when reverting
+        //to the normal list, the item needs to be deleted from there as well.
+        if(partsTableView.getItems() == Inventory.getAllFilteredParts()) {
+            for (Part item : Inventory.getAllFilteredParts()) {
+                i += 1;
+                if (item.getId() == id) {
+                    Inventory.getAllParts().remove(item);
+                    return Inventory.getAllFilteredParts().remove(item);
+                }
+            }
+        }
+        //if the user wants to delete an item without filtering items, then just delete from the normal list
+        //because when filtering afterwards, the item won't be found anyway
+        else if(partsTableView.getItems() == Inventory.getAllParts()) {
+            for (Part item : Inventory.getAllParts()) {
+                index += 1;
+                if (item.getId() == id) {
 
-        for(Part item: Inventory.getAllParts()){
-            index += 1;
-            if(item.getId() == id){
-
-                return Inventory.getAllParts().remove(item);
+                    return Inventory.getAllParts().remove(item);
+                }
             }
         }
         return false;
     }
     public boolean deleteProduct(int id){ //deletes an item from product list
-        //iterate through parts list. If the parameter ID matches
-        //with an id found in parts list, remove that item
         int index = -1;
-        for(Product product: Inventory.getAllProducts()){
-            index += 1;
-            if(product.getId() == id){
+        int i = -1;
+        //need to verify from where does the user want to delete the product item. If it is from a filtered search list,
+        //then need to delete the item from both the filtered search list and normal list since when reverting
+        //to the normal list, the item needs to be deleted from there as well.
+        if(productsTableView.getItems() == Inventory.getAllFilteredProducts()) {
+            for (Product item : Inventory.getAllFilteredProducts()) {
+                i += 1;
+                if (item.getId() == id) {
+                    Inventory.getAllProducts().remove(item);
+                    return Inventory.getAllFilteredProducts().remove(item);
+                }
+            }
+        }
+        //if the user wants to delete an item without filtering items, then just delete from the normal list
+        //because when filtering afterwards, the item won't be found anyway
+        else if(productsTableView.getItems() == Inventory.getAllProducts()) {
+            for (Product item : Inventory.getAllProducts()) {
+                index += 1;
+                if (item.getId() == id) {
 
-                return Inventory.getAllProducts().remove(product);
+                    return Inventory.getAllProducts().remove(item);
+                }
             }
         }
         return false;
