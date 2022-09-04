@@ -33,9 +33,14 @@ public class ModifyPartsController implements Initializable {
     public TextField maxText;
     public TextField machineIDText;
     public TextField IDText;
+    //////////////////CREATING NEW PART OBJECT TO BE USED FOR MODIFICATION///////////////
+    Part modifyPart = null;
     /////////////////////////////////////////////////////////////////////////////////
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Modify Parts Scene Initialized");}
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("Modify Parts Scene Initialized");
+        modifyPart = MainController.getModifyPart(); //initializing modifyPart with information sent from main controller
+    }
 
     //////////////////////////WIDGET BUTTONS///////////////////////////////////////
     public void onSave(ActionEvent actionEvent) throws IOException{
@@ -64,14 +69,16 @@ public class ModifyPartsController implements Initializable {
                 //System.out.println("Max value is less than min value. Please correct before saving.");
             }
             else {
+                //getting index of modified item to use for update within inventory updatePart method
+                int indexOfModifyPart = Inventory.getAllParts().indexOf(modifyPart);
                 if (inHouseSelected == true) {
                     int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or
                     InHousePart modifiedItem = new InHousePart(id, name, price, stock, min, max, machineID);
-                    update(id, modifiedItem);
+                    Inventory.updatePart(indexOfModifyPart, modifiedItem);
                 } else if (inHouseSelected == false) {
                     String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
                     OutsourcedPart modifiedItem = new OutsourcedPart(id, name, price, stock, min, max, machineID);
-                    update(id, modifiedItem);
+                    Inventory.updatePart(indexOfModifyPart, modifiedItem);
 
                 }
                 //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
@@ -133,20 +140,6 @@ public class ModifyPartsController implements Initializable {
 
 
     }
-    public boolean update(int id, Part part){
-        int index = -1;
-        //iterate through parts list. If the item id matches with parameter part id,
-        //then found the matching part to update
-        for(Part item: Inventory.getAllParts()){
-            index += 1;
-            if(item.getId() == id){
-                //once matching part has been found, the current item gets replaced
-                //with the new part at current item's index
-                Inventory.getAllParts().set(index, part);
-                return true;
-            }
-        }
-        return false;
-    }
+
     /////////////////////////////////////////////////////////////////////////////////
 }

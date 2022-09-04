@@ -64,6 +64,7 @@ public class ModifyProductsController implements Initializable {
     private Button cancelButton;
     ////////////////CREATING NEW PRODUCT OBJECT TO BE USED FOR MODIFICATION////////////////////////////
     private Product newProduct = null; //new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
+    private int indexOfNewProduct = -1;
     ///////////////////////////////////////////////////////////////////////
     ////////////////////////INITIALIZE//////////////////////////////////////
     @Override
@@ -71,6 +72,7 @@ public class ModifyProductsController implements Initializable {
         System.out.println("Modify Products Scene Initialized");
         ///////////////INITIALIZING newProduct RECEIVED FROM MAIN MENU////////////////////////////
         newProduct = MainController.getNewProduct();
+        indexOfNewProduct = Inventory.getAllProducts().indexOf(newProduct);
         ///////////////INITIALIZING PARTS TABLE VIEW///////////////////////
         //calls get-method from Parts class that corresponds to the parameter
         partsTableView.setItems(Inventory.getAllParts());
@@ -131,7 +133,7 @@ public class ModifyProductsController implements Initializable {
                 newProduct.setStock(stock);
                 //update the product stored in product list with index containing same id. Since id is not modifiable,
                 //then id is the parameter used to find appropriate item in product list.
-                update(id, newProduct);
+                Inventory.updateProduct(indexOfNewProduct, newProduct);
                 //saves all info from text field and update is successful. Cancel button fires to get back to main menu.
                 cancelButton.fireEvent(new ActionEvent());
             }
@@ -204,21 +206,6 @@ public class ModifyProductsController implements Initializable {
         minText.setText(String.valueOf(product.getMin()));
         maxText.setText(String.valueOf(product.getMax()));
         //associatedPartsTableView.setItems(product.getAllAssociatedParts());
-    }
-    public boolean update(int id, Product product){
-        int index = -1;
-        //iterate through products list. If the item id matches with parameter product id,
-        //then found the matching product to update
-        for(Product item: Inventory.getAllProducts()){
-            index += 1;
-            if(item.getId() == id){
-                //once matching product has been found, the current item gets replaced
-                //with the new product at current item's index
-                Inventory.getAllProducts().set(index, product);
-                return true;
-            }
-        }
-        return false;
     }
     ///////////////////////////////////////////////////////////////////////
 }

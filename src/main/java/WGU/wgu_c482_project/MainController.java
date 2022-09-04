@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-    /////////////SEND PRODUCT INFORMATION FOR MODIFY PRODUCT SCENE////////////
+    /////////////SEND PRODUCT OBJECT FOR MODIFY PRODUCT SCENE////////////
     private static Product newProduct = null;
     /** This is a method to return a Product object.
      This method is used to send a Product object initialized in this controller to another controller.
@@ -37,6 +37,10 @@ public class MainController implements Initializable {
     public static Product getNewProduct(){
         return newProduct;
     }
+    /////////////////////////////////////////////////////////////
+    ///////////SEND PART OBJECT FOR MODIFY PART SCENE/////////////////
+    private static Part modifyPart = null;
+    public static Part getModifyPart(){return modifyPart;}
     /////////////////////////////////////////////////////////////
     //////////////INITIALIZING PARTS VARIABLES///////////////////
     @FXML
@@ -134,6 +138,7 @@ public class MainController implements Initializable {
             //create fxml loader object to let loader object know which scene to view
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("ModifyParts.fxml"));
+            modifyPart = partsTableView.getSelectionModel().getSelectedItem();
             loader.load();
 
             //allowing fxml loader know which controller to use. The controller allows the use of any
@@ -310,56 +315,7 @@ public class MainController implements Initializable {
         }
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////HELPER METHODS//////////////////////////////////////////////////////////
-    /*public static ObservableList<Part> filterPart(String partName){
-        //if the filtered parts list is not empty, it means that the user has queried a search previously,
-        //and the list needs to be cleared before searching again
-        if(!(Inventory.getAllFilteredParts()).isEmpty()){
-            Inventory.getAllFilteredParts().clear();
-        }
-        //if a part exists within inventory parts list that contains either a substring of the part name or,
-        //if the ID is equivalent to the inserted parameter, then add that part to the filteredParts list
-        for(Part part : Inventory.getAllParts()){
-            if((part.getName().contains(partName)) || Integer.toString(part.getId()).contains(partName)){
-                Inventory.getAllFilteredParts().add(part);
-            }
-        }
-        //if the filter did not add any parts to the filtered list, then return the normal list
-        if(Inventory.getAllFilteredParts().isEmpty()){
-            return Inventory.getAllParts();
-        }
-        return Inventory.getAllFilteredParts();
-    }
-    public ObservableList<Product> filterProduct(String productName){
-        //if the filtered product list is not empty, it means that the user has queried a search previously,
-        //and the list needs to be cleared before searching again
-        if(!(Inventory.getAllFilteredProducts()).isEmpty()){
-            Inventory.getAllFilteredProducts().clear();
-        }
-        //if a product exists within inventory products list that contains either a substring of the part name or,
-        //if the ID is equivalent to the inserted parameter, then add that part to the filteredProducts list
-        for(Product product : Inventory.getAllProducts()){
-            if((product.getName().contains(productName)) || Integer.toString(product.getId()).contains(productName)){
-                Inventory.getAllFilteredProducts().add(product);
-            }
-        }
-        //if the filter did not add any products to the filtered list, then return the normal list
-        if(Inventory.getAllFilteredProducts().isEmpty()){
-            return Inventory.getAllProducts();
-        }
-        return Inventory.getAllFilteredProducts();
-    }*/
 
-    /*public boolean search(int id){ //method is not used within program. Keeping just in case I find a use.
-        for(Part part : Inventory.getAllParts()){
-            if(part.getId() == id){
-                return true;
-            }
-        }
-        return false;
-    }*/
-
-    ////////////////////////////////////////////////////////////////////////////////////////
     public void onActionExit(ActionEvent actionEvent) throws IOException {
         System.exit(0);
     }
