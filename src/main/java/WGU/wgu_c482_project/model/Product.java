@@ -75,9 +75,9 @@ public class Product {
     public ObservableList<Part> getAllAssociatedParts(){
         return associatedParts;
     }
-    public void setAllAssociatedParts(ObservableList newList){
+    /*public void setAllAssociatedParts(ObservableList newList){ method is unused
         associatedParts = newList;
-    }
+    }*/
     public void addAssociatedPart(Part part){
         associatedParts.add(part);
     }

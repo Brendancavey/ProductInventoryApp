@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
+    /////////////SEND PRODUCT INFORMATION FOR MODIFY PRODUCT SCENE////////////
     private static Product newProduct = null;
     public static Product getNewProduct(){
         return newProduct;
@@ -174,7 +175,7 @@ public class MainController implements Initializable {
 
             if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
                 //if the confirmation window ok button has been selected, continue to delete the selected item.
-                delete(idToDelete);
+                deletePart(idToDelete);
             }
         //if the user does not select an item and attempts to delete, then delete function causes a nullpointer exception error
         }catch(NullPointerException e){
@@ -247,12 +248,31 @@ public class MainController implements Initializable {
         }
     }
     public void onDeleteProduct(ActionEvent actionEvent) throws IOException{
-        System.out.println("Delete part was clicked!");
+        //try to delete, but catch the error if user attempts to delete an item without first selecting the item to delete.
+        try {
+            //if the user does select a valid item to delete, show a confirmation window with the ID of the selected item to confirm.
+            int idToDelete = productsTableView.getSelectionModel().getSelectedItem().getId();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete item with ID: " + (idToDelete) + "?");
+            alert.setTitle("Confirmation Message");
+
+            Optional<ButtonType> buttonClicked = alert.showAndWait();
+
+            if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
+                //if the confirmation window ok button has been selected, continue to delete the selected item.
+                deleteProduct(idToDelete);
+            }
+            //if the user does not select an item and attempts to delete, then delete function causes a nullpointer exception error
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Select the item you would like to delete.");
+            alert.showAndWait();
+        }
 
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////HELPER METHODS//////////////////////////////////////////////////////////
-    public boolean delete(int id){
+    public boolean deletePart(int id){ //deletes an item from parts list
         //iterate through parts list. If the parameter ID matches
         //with an id found in parts list, remove that item
         int index = -1;
@@ -262,6 +282,19 @@ public class MainController implements Initializable {
             if(item.getId() == id){
 
                 return Inventory.getAllParts().remove(item);
+            }
+        }
+        return false;
+    }
+    public boolean deleteProduct(int id){ //deletes an item from product list
+        //iterate through parts list. If the parameter ID matches
+        //with an id found in parts list, remove that item
+        int index = -1;
+        for(Product product: Inventory.getAllProducts()){
+            index += 1;
+            if(product.getId() == id){
+
+                return Inventory.getAllProducts().remove(product);
             }
         }
         return false;
@@ -305,14 +338,14 @@ public class MainController implements Initializable {
         return Inventory.getAllFilteredProducts();
     }
 
-    public boolean search(int id){
+    /*public boolean search(int id){ //method is not used within program. Keeping just in case I find a use.
         for(Part part : Inventory.getAllParts()){
             if(part.getId() == id){
                 return true;
             }
         }
         return false;
-    }
+    }*/
 
     ////////////////////////////////////////////////////////////////////////////////////////
     public void onActionExit(ActionEvent actionEvent) throws IOException {

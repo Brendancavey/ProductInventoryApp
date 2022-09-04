@@ -136,7 +136,8 @@ public class ModifyProductsController implements Initializable {
         //create temporary part to be used as the selected part to add to associated part list
         Part selectPart = (Part) partsTableView.getSelectionModel().getSelectedItem();
         if(selectPart == null){return;}
-        else{
+        //ensures to only add the part if the part doesnt exist within associated parts list
+        else if(!(newProduct.getAllAssociatedParts().contains(selectPart))){
             newProduct.addAssociatedPart(selectPart);
             System.out.println("Added!");
         }

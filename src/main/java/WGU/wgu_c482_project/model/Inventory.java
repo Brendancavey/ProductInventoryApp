@@ -4,12 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Inventory {
+    ////////////////////////INITIALIZING LISTS///////////////////////////////////////////////
     private static ObservableList<Part> allParts = FXCollections.observableArrayList();
     private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
     private static ObservableList<Part> allFilteredParts = FXCollections.observableArrayList();
     private static ObservableList<Product> allFilteredProducts = FXCollections.observableArrayList();
-
+    /////////////////SETTING UNIQUE IDs///////////////////////////////////////////////////////
     public static int newPartID = 1;
     public static int newProductID = 1;
     public static void incrementPartID(){
@@ -18,6 +19,7 @@ public class Inventory {
     public static void incrementProductID(){
         newProductID += 1;
     }
+    ///////////////////////////////////////////////////////////////////////////////////////
 
 
     ////////////////PARTS METHODS////////////////////
