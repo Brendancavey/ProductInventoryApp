@@ -112,18 +112,29 @@ public class ModifyProductsController implements Initializable {
             int stock = Integer.parseInt(invText.getText());
             int max = Integer.parseInt(maxText.getText());
             int min = Integer.parseInt(minText.getText());
-            //use temporary product object to save information into product
-            newProduct.setId(id);
-            newProduct.setName(name);
-            newProduct.setPrice(price);
-            newProduct.setMin(min);
-            newProduct.setMax(max);
-            newProduct.setStock(stock);
-            //update the product stored in product list with index containing same id. Since id is not modifiable,
-            //then id is the parameter used to find appropriate item in product list.
-            update(id, newProduct);
-            //saves all info from text field and update is successful. Cancel button fires to get back to main menu.
-            cancelButton.fireEvent(new ActionEvent());
+            //verifying logical errors are in order so that max value cannot be less than min value, and
+            //inventory is within bounds
+            if (max < min || stock > max || stock < min){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setContentText("Max, min, or inventory levels do not make sense. Please correct this before saving.");
+                alert.showAndWait();
+                //System.out.println("Max value is less than min value. Please correct before saving.");
+            }
+            else {
+                //use temporary product object to save information into product
+                newProduct.setId(id);
+                newProduct.setName(name);
+                newProduct.setPrice(price);
+                newProduct.setMin(min);
+                newProduct.setMax(max);
+                newProduct.setStock(stock);
+                //update the product stored in product list with index containing same id. Since id is not modifiable,
+                //then id is the parameter used to find appropriate item in product list.
+                update(id, newProduct);
+                //saves all info from text field and update is successful. Cancel button fires to get back to main menu.
+                cancelButton.fireEvent(new ActionEvent());
+            }
         }catch(NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error message");

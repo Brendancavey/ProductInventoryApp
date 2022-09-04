@@ -54,20 +54,29 @@ public class ModifyPartsController implements Initializable {
             int min = Integer.parseInt(minText.getText());
             int max = Integer.parseInt(maxText.getText());
 
-
-            if (inHouseSelected == true) {
-                int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or
-                InHousePart modifiedItem = new InHousePart(id, name, price, stock, min, max, machineID);
-                update(id, modifiedItem);
+            //verifying logical errors are in order so that max value cannot be less than min value, and
+            //inventory is within bounds
+            if (max < min || stock > max || stock < min){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setContentText("Max, min, or inventory levels do not make sense. Please correct this before saving.");
+                alert.showAndWait();
+                //System.out.println("Max value is less than min value. Please correct before saving.");
             }
-            else if (inHouseSelected == false){
-                String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
-                OutsourcedPart modifiedItem = new OutsourcedPart(id, name, price, stock, min, max, machineID);
-                update(id, modifiedItem);
+            else {
+                if (inHouseSelected == true) {
+                    int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or
+                    InHousePart modifiedItem = new InHousePart(id, name, price, stock, min, max, machineID);
+                    update(id, modifiedItem);
+                } else if (inHouseSelected == false) {
+                    String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
+                    OutsourcedPart modifiedItem = new OutsourcedPart(id, name, price, stock, min, max, machineID);
+                    update(id, modifiedItem);
 
+                }
+                //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
+                cancelButton.fireEvent(new ActionEvent());
             }
-            //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
-            cancelButton.fireEvent(new ActionEvent());
         }catch(NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Stop trying to break my program!");

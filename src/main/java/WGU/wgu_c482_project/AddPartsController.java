@@ -58,11 +58,12 @@ public class AddPartsController implements Initializable {
             int min = Integer.parseInt(minText.getText());
             int max = Integer.parseInt(maxText.getText());
 
-            //verifying logical errors are in order so that max value cannot be less than min value.
-            if (max < min){
+            //verifying logical errors are in order so that max value cannot be less than min value, and
+            //inventory levels within bounds
+            if (max < min || stock > max || stock < min){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Message");
-                alert.setContentText("Max value is less than min value. Please correct this before saving.");
+                alert.setContentText("Max, min, or inventory levels do not make sense. Please correct this before saving.");
                 alert.showAndWait();
                 //System.out.println("Max value is less than min value. Please correct before saving.");
             }
