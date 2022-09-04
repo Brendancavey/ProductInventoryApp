@@ -3,6 +3,8 @@ package WGU.wgu_c482_project;
 import WGU.wgu_c482_project.model.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ModifyProductsController implements Initializable {
@@ -54,26 +57,20 @@ public class ModifyProductsController implements Initializable {
     private TableColumn<Part, Integer> linkedInvLevelCol;
     @FXML
     private TableColumn<Part, Double> linkedPriceCol;
+
     /////////////////////////////////////////////////////////////////////
     ////////////////////BUTTONS//////////////////////////////////////////
     @FXML
     private Button cancelButton;
-    ////////////////CREATING NEW PRODUCT OBJECT////////////////////////////
-    //initializing new product to use for creating associated parts list. Associated
-    //instance variables will be set when product is saved. If the product is canceled and not saved
-    //then newProduct is unused and will get picked up by garbage collection
-    int defaultID = -1;
-    String defaultString = ".";
-    double defaultPrice = 1.00;
-    int defaultStock = 0;
-    int defaultMin = 0;
-    int defaultMax = 1;
-    Product newProduct = new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
+    ////////////////CREATING NEW PRODUCT OBJECT TO BE USED FOR MODIFICATION////////////////////////////
+    private Product newProduct = null; //new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
     ///////////////////////////////////////////////////////////////////////
     ////////////////////////INITIALIZE//////////////////////////////////////
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Modify Products Scene Initialized");
+        ///////////////INITIALIZING newProduct RECEIVED FROM MAIN MENU////////////////////////////
+        newProduct = MainController.getNewProduct();
         ///////////////INITIALIZING PARTS TABLE VIEW///////////////////////
         //calls get-method from Parts class that corresponds to the parameter
         partsTableView.setItems(Inventory.getAllParts());
@@ -83,7 +80,12 @@ public class ModifyProductsController implements Initializable {
         partsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         /////////////////////////////////////////////////////////////////////
         /////////////////////INITIALIZING ASSOCIATED PARTS TABLE VIEW///////////
-        //associatedPartsTableView.setItems(newProduct.getAllAssociatedParts()); //already set from sending product info from main menu
+        //Need a second try catch exception for when user does not select an item to modify?
+        try {
+            associatedPartsTableView.setItems(newProduct.getAllAssociatedParts());
+        }catch(NullPointerException e){
+            System.out.println("Not sure why the first try catch null pointer exception didnt work under main menu");
+        }
         linkedPartsIDCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         linkedPartsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         linkedInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -131,10 +133,37 @@ public class ModifyProductsController implements Initializable {
 
     }
     public void onAdd(ActionEvent actionEvent) throws IOException{
-        System.out.println("Added!");
+        //create temporary part to be used as the selected part to add to associated part list
+        Part selectPart = (Part) partsTableView.getSelectionModel().getSelectedItem();
+        if(selectPart == null){return;}
+        else{
+            newProduct.addAssociatedPart(selectPart);
+            System.out.println("Added!");
+        }
+        //associatePartsTableview is called here since any updated values get called after the scene has been initialized.
+        //by calling the table view onAdd, it ensures that the newProduct associated with the table shows the appropriate-associatedPartList
+        //associatedPartsTableView.setItems(newProduct.getAllAssociatedParts());
     }
     public void onRemove(ActionEvent actionEvent) throws IOException{
-        System.out.println("Removed!");
+        //create a temporary part to be used as the selected associated part
+        Part selectedAssociatedPart = (Part)associatedPartsTableView.getSelectionModel().getSelectedItem();
+        //if nothing is selected, no need to pop up confirmation window
+        if(selectedAssociatedPart == null){return;}
+        //else if something is selected, confirm with user if the selected item is to be deleted.
+        else{
+            System.out.println("Removed!");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this associated part?");
+            alert.setTitle("Confirmation Message");
+
+            Optional<ButtonType> buttonClicked = alert.showAndWait();
+
+            if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
+                //if the confirmation window ok button has been selected, continue to delete the selected item.
+                //call delete associated part to find matching ID to the selected associated part. If matching ID is found,
+                //then the associated part is removed from the associated part list
+                newProduct.deleteAssociatedPart(selectedAssociatedPart);
+            }
+        }
     }
     public void toMain(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
@@ -155,14 +184,14 @@ public class ModifyProductsController implements Initializable {
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////HELPER METHODS//////////////////////////////////
-    public void sendProductInformation(Product product){
+    public void sendProductInformation(Product product){ //used to obtain product information when selecting from main menu product list
         IDText.setText(String.valueOf(product.getId()));
         nameText.setText(product.getName());
         priceText.setText(String.valueOf(product.getPrice()));
         invText.setText(String.valueOf(product.getStock()));
         minText.setText(String.valueOf(product.getMin()));
         maxText.setText(String.valueOf(product.getMax()));
-        associatedPartsTableView.setItems(product.getAllAssociatedParts());
+        //associatedPartsTableView.setItems(product.getAllAssociatedParts());
     }
     public boolean update(int id, Product product){
         int index = -1;

@@ -75,6 +75,9 @@ public class Product {
     public ObservableList<Part> getAllAssociatedParts(){
         return associatedParts;
     }
+    public void setAllAssociatedParts(ObservableList newList){
+        associatedParts = newList;
+    }
     public void addAssociatedPart(Part part){
         associatedParts.add(part);
     }

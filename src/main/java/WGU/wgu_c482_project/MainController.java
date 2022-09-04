@@ -28,7 +28,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-
+    private static Product newProduct = null;
+    public static Product getNewProduct(){
+        return newProduct;
+    }
     //////////////INITIALIZING PARTS VARIABLES///////////////////
     @FXML
     private TableView<Part> partsTableView;
@@ -205,6 +208,11 @@ public class MainController implements Initializable {
             //create fxml loader object to let loader object know which scene to view
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("ModifyProducts.fxml"));
+            //setting newProduct before loader is loaded to save the information before loading loader scene
+            //used so that modifyScreen can receive Product information from main menu screen
+            newProduct = productsTableView.getSelectionModel().getSelectedItem();
+
+            //load fxmlloader
             loader.load();
 
             //allowing fxml loader know which controller to use. The controller allows the use of any
