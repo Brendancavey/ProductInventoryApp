@@ -201,21 +201,42 @@ public class MainController implements Initializable {
         stage.show();
     }
     public void onModifyProduct(ActionEvent actionEvent) throws IOException {
-        //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("ModifyProducts.fxml"));
+        try{
+            //create fxml loader object to let loader object know which scene to view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("ModifyProducts.fxml"));
+            loader.load();
 
-        //get the stage from an event's source widget
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            //allowing fxml loader know which controller to use. The controller allows the use of any
+            //public methods within modify parts controller file
+            ModifyProductsController mpcController = loader.getController();
+            //pass information from current controller to modifyPartsController using getSelection method
+            mpcController.sendProductInformation(productsTableView.getSelectionModel().getSelectedItem());
 
-        //create the new scene
-        Scene scene = new Scene(root, 1089, 590);
-        stage.setTitle("Modify Products Menu");
+            //load widget hierarchy of next screen
+            Parent root = loader.getRoot();
 
-        //set the scene on the stage
-        stage.setScene(scene);
+            //get the stage from an event's source widget
+            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
 
-        //show the stage (raise the curtains)
-        stage.show();
+            //create the new scene
+            Scene scene = new Scene(root, 1089, 590);
+            stage.setTitle("Modify Products Menu");
+
+            //set the scene on the stage
+            stage.setScene(scene);
+
+            //show the stage (raise the curtains) and wait meaning any code executed after this
+            //will only be executed after switching back to previous scene
+            //stage.showAndWait();
+            stage.show();
+            //if no selection was made, throw an error message to select an item
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Select the product you would like to modify.");
+            alert.showAndWait();
+        }
     }
     public void onDeleteProduct(ActionEvent actionEvent) throws IOException{
         System.out.println("Delete part was clicked!");

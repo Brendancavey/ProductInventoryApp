@@ -10,10 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 
@@ -36,51 +33,48 @@ public class ModifyPartsController implements Initializable {
     public TextField maxText;
     public TextField machineIDText;
     public TextField IDText;
-
+    /////////////////////////////////////////////////////////////////////////////////
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Modify Parts Scene Initialized");}
 
-    public boolean update(int id, Part part){
-        int index = -1;
-
-        for(Part item: Inventory.getAllParts()){
-            index += 1;
-            if(item.getId() == id){
-                Inventory.getAllParts().set(index, part);
-                return true;
-            }
-        }
-        return false;
-    }
+    //////////////////////////WIDGET BUTTONS///////////////////////////////////////
     public void onSave(ActionEvent actionEvent) throws IOException{
-        boolean inHouseSelected = true;
-        if(inHouse.isSelected()){
-            inHouseSelected = true;
-        }
-        else if(outsourced.isSelected()){
-            inHouseSelected = false;
-        }
-        int id = 1;
-        String name = nameText.getText();
-        double price = Double.parseDouble(priceText.getText());
-        int stock = Integer.parseInt(invText.getText());
-        int min = Integer.parseInt(minText.getText());
-        int max = Integer.parseInt(maxText.getText());
+        try{
+            boolean inHouseSelected = true;
+            if(inHouse.isSelected()){
+                inHouseSelected = true;
+            }
+            else if(outsourced.isSelected()){
+                inHouseSelected = false;
+            }
+            int id = Integer.parseInt(IDText.getText());
+            String name = nameText.getText();
+            double price = Double.parseDouble(priceText.getText());
+            int stock = Integer.parseInt(invText.getText());
+            int min = Integer.parseInt(minText.getText());
+            int max = Integer.parseInt(maxText.getText());
 
 
-        if (inHouseSelected == true) {
-            int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or
-            InHousePart modifiedItem = new InHousePart(id, name, price, stock, min, max, machineID);
-            update(1, modifiedItem);
-        }
-        else if (inHouseSelected == false){
-            String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
-            OutsourcedPart modifiedItem = new OutsourcedPart(id, name, price, stock, min, max, machineID);
-            update(1, modifiedItem);
+            if (inHouseSelected == true) {
+                int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or
+                InHousePart modifiedItem = new InHousePart(id, name, price, stock, min, max, machineID);
+                update(id, modifiedItem);
+            }
+            else if (inHouseSelected == false){
+                String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
+                OutsourcedPart modifiedItem = new OutsourcedPart(id, name, price, stock, min, max, machineID);
+                update(id, modifiedItem);
 
+            }
+            //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
+            cancelButton.fireEvent(new ActionEvent());
+        }catch(NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Stop trying to break my program!");
+            alert.setContentText("Make sure to not not not enter invalid entries into text field!");
+            alert.showAndWait();
         }
-        //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
-        cancelButton.fireEvent(new ActionEvent());
+
     }
     public void onInHouse(ActionEvent actionEvent) throws IOException{
         //System.out.println("in house was selected");
@@ -107,7 +101,8 @@ public class ModifyPartsController implements Initializable {
         //show the stage (raise the curtains)
         stage.show();
     }
-
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////HELPER METHODS//////////////////////////////////////
     public void sendPartInformation(Part part){
         IDText.setText(String.valueOf(part.getId()));
         nameText.setText(part.getName());
@@ -129,4 +124,20 @@ public class ModifyPartsController implements Initializable {
 
 
     }
+    public boolean update(int id, Part part){
+        int index = -1;
+        //iterate through parts list. If the item id matches with parameter part id,
+        //then found the matching part to update
+        for(Part item: Inventory.getAllParts()){
+            index += 1;
+            if(item.getId() == id){
+                //once matching part has been found, the current item gets replaced
+                //with the new part at current item's index
+                Inventory.getAllParts().set(index, part);
+                return true;
+            }
+        }
+        return false;
+    }
+    /////////////////////////////////////////////////////////////////////////////////
 }
