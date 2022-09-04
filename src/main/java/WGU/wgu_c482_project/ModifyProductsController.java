@@ -62,6 +62,11 @@ public class ModifyProductsController implements Initializable {
     ////////////////////BUTTONS//////////////////////////////////////////
     @FXML
     private Button cancelButton;
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////CREATE TEMPORARY LIST TO HOLD DELETED ASSOCIATED PARTS//////
+    //this tempList will hold all current items of the product.
+    //If user decides to cancel, copy all items within tempList to the associated parts list to revert back
+    private ObservableList<Part> tempList = FXCollections.observableArrayList();
     ////////////////CREATING NEW PRODUCT OBJECT TO BE USED FOR MODIFICATION////////////////////////////
     private Product newProduct = null; //new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
     private int indexOfNewProduct = -1;
@@ -72,7 +77,8 @@ public class ModifyProductsController implements Initializable {
         System.out.println("Modify Products Scene Initialized");
         ///////////////INITIALIZING newProduct RECEIVED FROM MAIN MENU////////////////////////////
         newProduct = MainController.getNewProduct();
-        indexOfNewProduct = Inventory.getAllProducts().indexOf(newProduct);
+        indexOfNewProduct = Inventory.getAllProducts().indexOf(newProduct); //store index to use for update
+        tempList = newProduct.getAllAssociatedParts(); //initialize tempList to capture status of selected products associated parts list
         ///////////////INITIALIZING PARTS TABLE VIEW///////////////////////
         //calls get-method from Parts class that corresponds to the parameter
         partsTableView.setItems(Inventory.getAllParts());
@@ -134,8 +140,22 @@ public class ModifyProductsController implements Initializable {
                 //update the product stored in product list with index containing same id. Since id is not modifiable,
                 //then id is the parameter used to find appropriate item in product list.
                 Inventory.updateProduct(indexOfNewProduct, newProduct);
-                //saves all info from text field and update is successful. Cancel button fires to get back to main menu.
-                cancelButton.fireEvent(new ActionEvent());
+                //go back to main menu when product has been successfully updated.
+                //load widget hierarchy of next screen
+                Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
+
+                //get the stage from an event's source widget
+                Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+                //create the new scene
+                Scene scene = new Scene(root, 919, 544);
+                stage.setTitle("Main Menu");
+
+                //set the scene on the stage
+                stage.setScene(scene);
+
+                //show the stage (raise the curtains)
+                stage.show();
             }
         }catch(NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -175,11 +195,22 @@ public class ModifyProductsController implements Initializable {
                 //if the confirmation window ok button has been selected, continue to delete the selected item.
                 //call delete associated part to find matching ID to the selected associated part. If matching ID is found,
                 //then the associated part is removed from the associated part list
+                tempList.add(selectedAssociatedPart);
                 newProduct.deleteAssociatedPart(selectedAssociatedPart);
             }
         }
     }
     public void toMain(ActionEvent actionEvent) throws IOException {
+        //if user decided to cancel, clear the associated parts list
+        // add all items in tempList back into products associated list.
+        newProduct.getAllAssociatedParts().clear();
+        for(Part item : tempList){
+            newProduct.addAssociatedPart(item);
+        }
+        //after all items have been copied over. Make sure to clear tempList
+        tempList.clear();
+
+
         //load widget hierarchy of next screen
         Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
 
