@@ -92,7 +92,7 @@ public class AddProductsController implements Initializable {
                 //when the parts filter text field detects a change in text, set the table view
                 //to where helper method filter is called with the current filter text
                 //as the parameter
-                partsTableView.setItems(MainController.filterPart(partsFilterText.getText()));
+                partsTableView.setItems(Inventory.filterPart(partsFilterText.getText()));
             }
         });
     }
