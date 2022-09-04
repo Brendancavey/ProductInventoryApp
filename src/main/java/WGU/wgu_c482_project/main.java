@@ -9,7 +9,12 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
+/** This class creates an application that stores and displays products and parts.*/
 public class main extends Application {
+    /** This is the start method of the application.
+     This method starts automatically right after default init method and runs to show main menu.
+     @param stage Method takes in a stage object to load a scene onto.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml")); //
@@ -19,7 +24,7 @@ public class main extends Application {
         //stage.setFullScreen(true);
         stage.show();
     }
-
+    /** This is the main method. It is the first method to get called when running the Java Program. Launches the application to begin methods - init, start, stop. */
     public static void main(String[] args) {
         InHousePart hammer = new InHousePart(1, "Hammer", 5.50, 10, 3, 20, 4441);
         InHousePart screw = new InHousePart(2, "screw", 5.90, 4, 1, 10, 4231);

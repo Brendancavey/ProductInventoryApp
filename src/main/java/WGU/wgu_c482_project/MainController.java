@@ -30,6 +30,10 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
     /////////////SEND PRODUCT INFORMATION FOR MODIFY PRODUCT SCENE////////////
     private static Product newProduct = null;
+    /** This is a method to return a Product object.
+     This method is used to send a Product object initialized in this controller to another controller.
+     @return newProduct Method returns a Product object that has been initialized in MainController.java.
+     */
     public static Product getNewProduct(){
         return newProduct;
     }
