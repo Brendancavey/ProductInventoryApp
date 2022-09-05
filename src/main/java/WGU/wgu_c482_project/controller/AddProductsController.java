@@ -13,12 +13,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** This class is the controller for add products scene.*/
 public class AddProductsController implements Initializable {
     //////////////////////INITIALIZING PRODUCT TEXTFIELDS///////////////////
     public TextField nameText;
@@ -67,7 +67,11 @@ public class AddProductsController implements Initializable {
     int defaultMax = 1;
     Product newProduct = new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
     ///////////////////////////////////////////////////////////////////////
-
+    /** This is the initialize method.
+     This is a method that gets initialized when first landing on the add products scene.
+     @param url Method takes in an url to determine the location of the file.
+     @param resourceBundle takes in the resource bundle required.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add Products Scene Initialized");
@@ -92,14 +96,18 @@ public class AddProductsController implements Initializable {
                 //when the parts filter text field detects a change in text, set the table view
                 //to where helper method filter is called with the current filter text
                 //as the parameter
-                partsTableView.setItems(Inventory.filterPart(partsFilterText.getText()));
+                partsTableView.setItems(Inventory.lookupPart(partsFilterText.getText()));
             }
         });
     }
-
+    /** This is the onSave method.
+     This is a method that stores all information from the corresponding text fields into appropriate variables.
+     A product object that was initialized sets their appropriate instance variables to the corresponding variables and gets added to the Inventory list.
+     The user is then sent back to the main menu scene.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onSave(ActionEvent actionEvent) throws IOException{
         try{
-
             int id = Inventory.newProductID; //newPartId will increment at the end of the function call to ensure each id is unique
             String name = nameText.getText();
             double price = Double.parseDouble(priceText.getText());
@@ -139,6 +147,11 @@ public class AddProductsController implements Initializable {
             alert.showAndWait();
         }
     }
+    /** This is the onAdd method.
+     This is a method that creates a part object that corresponds to the user selection from the parts table view.
+     The part object gets added to the product associated parts list if the selection is not null
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onAdd(ActionEvent actionEvent) throws IOException{
         //create temporary part to be used as the selected part to add to associated part list
         Part selectPart = (Part) partsTableView.getSelectionModel().getSelectedItem();
@@ -148,8 +161,12 @@ public class AddProductsController implements Initializable {
             newProduct.addAssociatedPart(selectPart);
             System.out.println("Added!");
         }
-
     }
+    /** This is the onRemove method.
+     This is a method that creates a part object that corresponds to the user selection from the associated parts table view.
+     If the user confirms to delete, then the part gets removed from the associated parts list that corresponds to the current product.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onRemove(ActionEvent actionEvent) throws IOException{
         //create a temporary part to be used as the selected associated part
         Part selectedAssociatedPart = (Part)associatedPartsTableView.getSelectionModel().getSelectedItem();
@@ -157,7 +174,6 @@ public class AddProductsController implements Initializable {
         if(selectedAssociatedPart == null){return;}
         //else if something is selected, confirm with user if the selected item is to be deleted.
         else{
-            System.out.println("Removed!");
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this associated part?");
             alert.setTitle("Confirmation Message");
 
@@ -171,6 +187,10 @@ public class AddProductsController implements Initializable {
             }
         }
     }
+    /** This is the toMain method.
+     This is a method that reverts all changes made and takes the user back to the main menu when they confirm to cancel changes.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void toMain(ActionEvent actionEvent) throws IOException { //toMain represents the cancel button
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu and cancel all changes?");
         alert.setTitle("Confirmation Message");
@@ -183,11 +203,15 @@ public class AddProductsController implements Initializable {
         }
 
     }
+    /** This is the onSearchPart method.
+     This is a method that uses the corresponding text field as a search query and displays an error message if the search query is unable to find the desired item.
+     @param actionEvent Method takes in an action event that gets triggered when the user interacts with the corresponding action (the enter key).
+     */
     public void onSearchPart(ActionEvent actionEvent) throws IOException{
         System.out.println("Searching...");
         //filterPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
         //press the enter button
-        if(Inventory.filterPart(partsFilterText.getText()) == Inventory.getAllParts()){
+        if(Inventory.lookupPart(partsFilterText.getText()) == Inventory.getAllParts()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setContentText("Unable to find any items within search parameters");
@@ -195,6 +219,10 @@ public class AddProductsController implements Initializable {
         }
     }
     //////////////HELPER METHODS//////////////////////////////////////////////
+    /** This is the goBackToMainMenu method.
+     This is a helper method that reduces redundancy within the code. This method is called
+     whenever it is required that the user go back to the main menu.
+     */
     public void goBackToMainMenu(ActionEvent actionEvent) throws IOException{
         //load widget hierarchy of next screen
         Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/MainMenu.fxml"));

@@ -12,15 +12,12 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-
 import java.io.IOException;
-
-
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** This class is the controller for add parts scene.*/
 public class AddPartsController implements Initializable {
 
     //allowing widgets within fxml page to be used within code
@@ -35,9 +32,18 @@ public class AddPartsController implements Initializable {
     public TextField maxText;
     public TextField machineIDText;
 
+    /** This is the initialize method.
+     This is a method that gets initialized when first landing on the add parts scene.
+     @param url Method takes in an url to determine the location of the file.
+     @param resourceBundle takes in the resource bundle required.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Add Parts Scene Initialized");}
-
+    /** This is the onSave method.
+     This is a method that stores all information from the corresponding text fields into appropriate variables to create a part object.
+     The part object then gets added into the Inventory list and the user is sent back to the main menu scene.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onSave(ActionEvent actionEvent) throws IOException{
 
         try{
@@ -92,14 +98,26 @@ public class AddPartsController implements Initializable {
 
         }
     }
+    /** This is the onInHouse method.
+     This is a method that changes the name of the corresponding label to the appropriate name
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding radio button.
+     */
     public void onInHouse(ActionEvent actionEvent) throws IOException{
         //System.out.println("in house was selected");
         machineID.setText("Machine ID");
     }
+    /** This is the onOutsourced method.
+     This is a method that changes the name of the corresponding label to the appropriate name
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding radio button.
+     */
     public void onOutsourced(ActionEvent actionEvent) throws IOException{
         //System.out.println("outsourced was selected");
         machineID.setText("Company Name");
     }
+    /** This is the toMain method.
+     This is a method that reverts all changes made and takes the user back to the main menu when they confirm to cancel changes.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void toMain(ActionEvent actionEvent) throws IOException { //toMain represents the cancel button
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu and cancel all changes?");
         alert.setTitle("Confirmation Message");
@@ -110,6 +128,10 @@ public class AddPartsController implements Initializable {
         }
     }
     ///////////////////HELPER METHODS/////////////////////////////////////////
+    /** This is the goBackToMainMenu method.
+     This is a helper method that reduces redundancy within the code. This method is called
+     whenever it is required that the user go back to the main menu.
+     */
     public void goBackToMainMenu(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/MainMenu.fxml"));
 

@@ -1,6 +1,5 @@
 package WGU.wgu_c482_project.controller;
 
-
 import WGU.wgu_c482_project.model.Inventory;
 import WGU.wgu_c482_project.model.Part;
 import WGU.wgu_c482_project.model.Product;
@@ -16,15 +15,12 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
-
 import java.io.IOException;
-
-
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** This class is the controller for the main menu.*/
 public class MainController implements Initializable {
     /////////////SEND PRODUCT OBJECT FOR MODIFY PRODUCT SCENE////////////
     private static Product newProduct = null;
@@ -38,6 +34,10 @@ public class MainController implements Initializable {
     /////////////////////////////////////////////////////////////
     ///////////SEND PART OBJECT FOR MODIFY PART SCENE/////////////////
     private static Part modifyPart = null;
+    /** This is a method to return a Part object.
+     This method is used to send a Part object initialized in this controller to another controller.
+     @return modifyPart Method returns a Part object that has been initialized in MainController.java.
+     */
     public static Part getModifyPart(){return modifyPart;}
     /////////////////////////////////////////////////////////////
     //////////////INITIALIZING PARTS VARIABLES///////////////////
@@ -71,7 +71,11 @@ public class MainController implements Initializable {
     private TextField productsFilterText;
     /////////////////////////////////////////////////////////
 
-
+    /** This is the initialize method.
+     This is a method that gets initialized when first landing on the main menu scene.
+     @param url Method takes in a url to determine the location of the file main menu.
+     @param resourceBundle takes in the resource bundle required for main menu.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Main Menu Scene Initialized");
@@ -99,14 +103,14 @@ public class MainController implements Initializable {
                 //when the parts filter text field detects a change in text, set the table view
                 //to where helper method filter is called with the current filter text
                 //as the parameter
-                partsTableView.setItems(Inventory.filterPart(partsFilterText.getText()));
+                partsTableView.setItems(Inventory.lookupPart(partsFilterText.getText()));
 
             }
         });
         productsFilterText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                productsTableView.setItems(Inventory.filterProduct(productsFilterText.getText()));
+                productsTableView.setItems(Inventory.lookupProduct(productsFilterText.getText()));
             }
         });
         //////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +118,10 @@ public class MainController implements Initializable {
     }
 
     /////////////////////////PARTS WIDGETS ACTIONS/////////////////////////////////////////////////////////////
+    /** This is the onAddPart method.
+     This is a method takes the user to the add part scene.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onAddPart(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
         Parent root = FXMLLoader.load(MainController.class.getResource("/WGU/wgu_c482_project/AddParts.fxml"));
@@ -131,6 +139,10 @@ public class MainController implements Initializable {
         //show the stage (raise the curtains)
         stage.show();
     }
+    /** This is the onModifyPart method.
+     This is a method takes the user to the modify part scene.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onModifyPart(ActionEvent actionEvent) throws IOException {
         try{
             //create fxml loader object to let loader object know which scene to view
@@ -163,6 +175,10 @@ public class MainController implements Initializable {
 
 
     }
+    /** This is the onDeletePart method.
+     This is a method that deletes a part that corresponds to the user's selection.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onDeletePart(ActionEvent actionEvent) throws IOException{
         //try to delete, but catch the error if user attempts to delete an item without first selecting the item to delete.
         try {
@@ -185,11 +201,15 @@ public class MainController implements Initializable {
             alert.showAndWait();
         }
     }
+    /** This is the onSearchPart method.
+     This is a method that uses the corresponding text field as a search query and displays an error message if the search query is unable to find the desired item.
+     @param actionEvent Method takes in an action event that gets triggered when the user interacts with the corresponding action (the enter key).
+     */
     public void onSearchPart(ActionEvent actionEvent) throws IOException{
         System.out.println("Searching...");
         //filterPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
         //press the enter button
-        if(Inventory.filterPart(partsFilterText.getText()) == Inventory.getAllParts()){
+        if(Inventory.lookupPart(partsFilterText.getText()) == Inventory.getAllParts()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setContentText("Unable to find any items within search parameters");
@@ -199,6 +219,10 @@ public class MainController implements Initializable {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////PRODUCT WIDGETS ACTIONS/////////////////////////////////////////////////////////
+    /** This is the onAddProduct method.
+     This is a method takes the user to the add product scene.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onAddProduct(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
         Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/AddProducts.fxml"));
@@ -216,6 +240,10 @@ public class MainController implements Initializable {
         //show the stage (raise the curtains)
         stage.show();
     }
+    /** This is the onModifyProduct method.
+     This is a method takes the user to the modify product scene.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onModifyProduct(ActionEvent actionEvent) throws IOException {
         try{
             //create fxml loader object to let loader object know which scene to view
@@ -250,6 +278,10 @@ public class MainController implements Initializable {
             alert.showAndWait();
         }
     }
+    /** This is the onDeleteProduct method.
+     This is a method that deletes a product that corresponds to the user's selection.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onDeleteProduct(ActionEvent actionEvent) throws IOException{
         //try to delete, but catch the error if user attempts to delete an item without first selecting the item to delete.
         try {
@@ -282,11 +314,15 @@ public class MainController implements Initializable {
         }
 
     }
+    /** This is the onSearchProduct method.
+     This is a method that uses the corresponding text field as a search query and displays an error message if the search query is unable to find the desired item.
+     @param actionEvent Method takes in an action event that gets triggered when the user interacts with the corresponding action (the enter key).
+     */
     public void onSearchProduct(ActionEvent actionEvent) throws IOException{
         System.out.println("Searching...");
         //filterProduct returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchProduct or
         //press the enter button
-        if(Inventory.filterProduct(productsFilterText.getText()) == Inventory.getAllProducts()){
+        if(Inventory.lookupProduct(productsFilterText.getText()) == Inventory.getAllProducts()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setContentText("Unable to find any items within search parameters");
@@ -295,6 +331,10 @@ public class MainController implements Initializable {
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /** This is the onActionExit method.
+     This is a method that cloes the program.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button..
+     */
     public void onActionExit(ActionEvent actionEvent) throws IOException {
         System.exit(0);
     }

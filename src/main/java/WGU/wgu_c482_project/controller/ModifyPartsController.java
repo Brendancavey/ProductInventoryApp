@@ -12,14 +12,12 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-
 import java.io.IOException;
-
-
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+/** This class is the controller for modify parts scene.*/
 public class ModifyPartsController implements Initializable {
 
     //allowing widgets within fxml page to be used within code
@@ -37,6 +35,11 @@ public class ModifyPartsController implements Initializable {
     //////////////////CREATING NEW PART OBJECT TO BE USED FOR MODIFICATION///////////////
     Part modifyPart = null;
     /////////////////////////////////////////////////////////////////////////////////
+    /** This is the initialize method.
+     This is a method that gets initialized when first landing on the modify parts scene.
+     @param url Method takes in an url to determine the location of the file.
+     @param resourceBundle takes in the resource bundle required.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Modify Parts Scene Initialized");
@@ -44,6 +47,11 @@ public class ModifyPartsController implements Initializable {
     }
 
     //////////////////////////WIDGET BUTTONS///////////////////////////////////////
+    /** This is the onSave method.
+     This is a method that stores all information from the corresponding text fields into appropriate variables to create a part object.
+     The part object then replaces the object within the Inventory list with the same index. The user is then sent back to the main menu scene.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onSave(ActionEvent actionEvent) throws IOException{
         try{
             boolean inHouseSelected = true;
@@ -92,14 +100,26 @@ public class ModifyPartsController implements Initializable {
             alert.showAndWait();
         }
     }
+    /** This is the onInHouse method.
+     This is a method that changes the name of the corresponding label to the appropriate name
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding radio button.
+     */
     public void onInHouse(ActionEvent actionEvent) throws IOException{
         //System.out.println("in house was selected");
         machineID.setText("Machine ID");
     }
+    /** This is the onOutsourced method.
+     This is a method that changes the name of the corresponding label to the appropriate name
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding radio button.
+     */
     public void onOutsourced(ActionEvent actionEvent) throws IOException{
         //System.out.println("outsourced was selected");
         machineID.setText("Company Name");
     }
+    /** This is the toMain method.
+     This is a method that reverts all changes made and takes the user back to the main menu when they confirm to cancel changes.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void toMain(ActionEvent actionEvent) throws IOException { //to main represents the cancel button
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu and cancel all changes?");
         alert.setTitle("Confirmation Message");
@@ -111,6 +131,11 @@ public class ModifyPartsController implements Initializable {
     }
     //////////////////////////////////////////////////////////////////////////////
     //////////////////////////HELPER METHODS//////////////////////////////////////
+    /** This is the sendPartInformation method.
+     This is a helper method that captures part information from a different scene, and displays
+     the information to the corresponding labels within the current scene.
+     @param part Method takes in a part object
+     */
     public void sendPartInformation(Part part){
         IDText.setText(String.valueOf(part.getId()));
         nameText.setText(part.getName());
@@ -129,9 +154,11 @@ public class ModifyPartsController implements Initializable {
             machineIDText.setText(((OutsourcedPart)part).getCompanyName());
             outsourced.fire();
         }
-
-
     }
+    /** This is the goBackToMainMenu method.
+     This is a helper method that reduces redundancy within the code. This method is called
+     whenever it is required that the user go back to the main menu.
+     */
     public void goBackToMainMenu(ActionEvent actionEvent) throws IOException{
         //load widget hierarchy of next screen
         Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/MainMenu.fxml"));

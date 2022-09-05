@@ -44,7 +44,7 @@ public class Inventory {
     public static ObservableList<Part> getAllFilteredParts(){
         return allFilteredParts;
     }
-    public static ObservableList<Part> filterPart(String partName){
+    public static ObservableList<Part> lookupPart(String partName){
         //if the filtered parts list is not empty, it means that the user has queried a search previously,
         //and the list needs to be cleared before searching again
         if(!(Inventory.getAllFilteredParts()).isEmpty()){
@@ -63,6 +63,11 @@ public class Inventory {
         }
         return Inventory.getAllFilteredParts();
     }
+    /*public static Part lookupPart(int partId){
+    I did not find it necessary to overload this method. parttId can be casted to a String and
+    compared to parttName within the same method. Refer to line 56.
+        return null;
+    }*/
 
     ////////////////////////////////////////////////
     //////////////PRODUCT METHODS//////////////////
@@ -87,7 +92,7 @@ public class Inventory {
     public static ObservableList<Product> getAllFilteredProducts(){
         return allFilteredProducts;
     }
-    public static ObservableList<Product> filterProduct(String productName){
+    public static ObservableList<Product> lookupProduct(String productName){
         //if the filtered product list is not empty, it means that the user has queried a search previously,
         //and the list needs to be cleared before searching again
         if(!(Inventory.getAllFilteredProducts()).isEmpty()){
@@ -106,6 +111,11 @@ public class Inventory {
         }
         return Inventory.getAllFilteredProducts();
     }
+    /*public static Product lookupProduct(int productId){
+    I did not find it necessary to overload this method. productId can be casted to a String and
+    compared to productName within the same method. Refer to line 104.
+        return null;
+    }*/
 
     ///////////////////////////////////////////////
 }

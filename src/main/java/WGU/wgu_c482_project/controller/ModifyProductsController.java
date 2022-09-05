@@ -15,12 +15,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** This class is the controller for the modify products scene.*/
 public class ModifyProductsController implements Initializable {
     //////////////////////INITIALIZING PRODUCT TEXTFIELDS///////////////////
     public TextField IDText;
@@ -73,6 +73,11 @@ public class ModifyProductsController implements Initializable {
     private int indexOfNewProduct = -1;
     ///////////////////////////////////////////////////////////////////////
     ////////////////////////INITIALIZE//////////////////////////////////////
+    /** This is the initialize method.
+     This is a method that gets initialized when first landing on the modify products scene.
+     @param url Method takes in an url to determine the location of the file.
+     @param resourceBundle takes in the resource bundle required.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Modify Products Scene Initialized");
@@ -111,7 +116,7 @@ public class ModifyProductsController implements Initializable {
                 //when the parts filter text field detects a change in text, set the table view
                 //to where helper method filter is called with the current filter text
                 //as the parameter
-                partsTableView.setItems(Inventory.filterPart(partsFilterText.getText()));
+                partsTableView.setItems(Inventory.lookupPart(partsFilterText.getText()));
             }
         });
     }
@@ -211,7 +216,7 @@ public class ModifyProductsController implements Initializable {
         System.out.println("Searching...");
         //filterPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
         //press the enter button
-        if(Inventory.filterPart(partsFilterText.getText()) == Inventory.getAllParts()){
+        if(Inventory.lookupPart(partsFilterText.getText()) == Inventory.getAllParts()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setContentText("Unable to find any items within search parameters");
