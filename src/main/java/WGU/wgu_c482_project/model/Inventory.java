@@ -1,9 +1,7 @@
 package WGU.wgu_c482_project.model;
 
-import WGU.wgu_c482_project.MainController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableView;
 
 public class Inventory {
     ////////////////////////INITIALIZING LISTS///////////////////////////////////////////////

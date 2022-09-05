@@ -1,4 +1,4 @@
-package WGU.wgu_c482_project;
+package WGU.wgu_c482_project.controller;
 
 import WGU.wgu_c482_project.model.InHousePart;
 import WGU.wgu_c482_project.model.Inventory;
@@ -34,8 +34,6 @@ public class AddPartsController implements Initializable {
     public TextField minText;
     public TextField maxText;
     public TextField machineIDText;
-
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Add Parts Scene Initialized");}
@@ -79,15 +77,8 @@ public class AddPartsController implements Initializable {
 
                 }
                 Inventory.incrementPartID(); //increment partID if save was successfull
-                //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
-                //cancelButton.fireEvent(new ActionEvent());
-                //Goes back to main menu. Running off of cancel button triggers alert. Don't want that.
-                Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
-                Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-                Scene scene = new Scene(root, 919, 544);
-                stage.setTitle("Main Menu");
-                stage.setScene(scene);
-                stage.show();
+                //information successfully saved. Go back to main menu.
+                goBackToMainMenu(actionEvent);
             }
 
         //if invalid entries are entered into text field, pop up window claiming values are invalid
@@ -100,9 +91,6 @@ public class AddPartsController implements Initializable {
             alert.showAndWait();
 
         }
-
-
-
     }
     public void onInHouse(ActionEvent actionEvent) throws IOException{
         //System.out.println("in house was selected");
@@ -112,31 +100,31 @@ public class AddPartsController implements Initializable {
         //System.out.println("outsourced was selected");
         machineID.setText("Company Name");
     }
-    public void toMain(ActionEvent actionEvent) throws IOException {
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu?");
+    public void toMain(ActionEvent actionEvent) throws IOException { //toMain represents the cancel button
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu and cancel all changes?");
         alert.setTitle("Confirmation Message");
-
         Optional<ButtonType> buttonClicked = alert.showAndWait();
-
         if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
-            //if the confirmation window ok button has been selected, continue to delete the selected item.
-            //load widget hierarchy of next screen
-            Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
-
-            //get the stage from an event's source widget
-            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-
-            //create the new scene
-            Scene scene = new Scene(root, 919, 544);
-            stage.setTitle("Main Menu");
-
-            //set the scene on the stage
-            stage.setScene(scene);
-
-            //show the stage (raise the curtains)
-            stage.show();
+            //if the confirmation window ok button has been selected, continue to cancel and go back to main menu
+            goBackToMainMenu(actionEvent);
         }
-
     }
+    ///////////////////HELPER METHODS/////////////////////////////////////////
+    public void goBackToMainMenu(ActionEvent actionEvent) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/MainMenu.fxml"));
+
+        //get the stage from an event's source widget
+        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+        //create the new scene
+        Scene scene = new Scene(root, 919, 544);
+        stage.setTitle("Main Menu");
+
+        //set the scene on the stage
+        stage.setScene(scene);
+
+        //show the stage (raise the curtains)
+        stage.show();
+    }
+    ////////////////////////////////////////////////////////////////////////
 }

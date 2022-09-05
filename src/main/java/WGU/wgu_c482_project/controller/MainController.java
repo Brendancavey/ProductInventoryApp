@@ -1,4 +1,4 @@
-package WGU.wgu_c482_project;
+package WGU.wgu_c482_project.controller;
 
 
 import WGU.wgu_c482_project.model.Inventory;
@@ -6,7 +6,6 @@ import WGU.wgu_c482_project.model.Part;
 import WGU.wgu_c482_project.model.Product;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -17,7 +16,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.application.Application;
 
 
 import java.io.IOException;
@@ -118,7 +116,7 @@ public class MainController implements Initializable {
     /////////////////////////PARTS WIDGETS ACTIONS/////////////////////////////////////////////////////////////
     public void onAddPart(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("AddParts.fxml"));
+        Parent root = FXMLLoader.load(MainController.class.getResource("/WGU/wgu_c482_project/AddParts.fxml"));
 
         //get the stage from an event's source widget
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -137,32 +135,22 @@ public class MainController implements Initializable {
         try{
             //create fxml loader object to let loader object know which scene to view
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("ModifyParts.fxml"));
-            modifyPart = partsTableView.getSelectionModel().getSelectedItem();
+            loader.setLocation(MainController.class.getResource("/WGU/wgu_c482_project/ModifyParts.fxml"));
+            modifyPart = partsTableView.getSelectionModel().getSelectedItem(); //save the selection into a modifyPart object to send to the modify part scene
             loader.load();
 
             //allowing fxml loader know which controller to use. The controller allows the use of any
             //public methods within modify parts controller file
             ModifyPartsController mpcController = loader.getController();
-            //pass information from current controller to modifyPartsController using getSelection method
+            //pass information from current controller to modifyPartsController using getSelection method to fill in appropriate text fields
             mpcController.sendPartInformation(partsTableView.getSelectionModel().getSelectedItem());
 
-            //load widget hierarchy of next screen
+            //go to modify Parts scene
             Parent root = loader.getRoot();
-
-            //get the stage from an event's source widget
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-
-            //create the new scene
             Scene scene = new Scene(root, 650, 590);
             stage.setTitle("Modify Parts Menu");
-
-            //set the scene on the stage
             stage.setScene(scene);
-
-            //show the stage (raise the curtains) and wait meaning any code executed after this
-            //will only be executed after switching back to previous scene
-            //stage.showAndWait();
             stage.show();
         //if no selection was made, throw an error message to select an item
         }catch(NullPointerException e){
@@ -213,7 +201,7 @@ public class MainController implements Initializable {
     //////////////////////////////PRODUCT WIDGETS ACTIONS/////////////////////////////////////////////////////////
     public void onAddProduct(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("AddProducts.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/AddProducts.fxml"));
 
         //get the stage from an event's source widget
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -232,10 +220,10 @@ public class MainController implements Initializable {
         try{
             //create fxml loader object to let loader object know which scene to view
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("ModifyProducts.fxml"));
+            loader.setLocation(getClass().getResource("/WGU/wgu_c482_project/ModifyProducts.fxml"));
             //setting newProduct before loader is loaded to save the information before loading loader scene
             //used so that modifyScreen can receive Product information from main menu screen
-            newProduct = productsTableView.getSelectionModel().getSelectedItem();
+            newProduct = productsTableView.getSelectionModel().getSelectedItem(); //get selection and save into a product object to send to modify product scene
 
             //load fxmlloader
             loader.load();
@@ -246,23 +234,14 @@ public class MainController implements Initializable {
             //pass information from current controller to modifyPartsController using getSelection method
             mpcController.sendProductInformation(productsTableView.getSelectionModel().getSelectedItem());
 
-            //load widget hierarchy of next screen
+            //go to modify products scene
             Parent root = loader.getRoot();
-
-            //get the stage from an event's source widget
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-
-            //create the new scene
             Scene scene = new Scene(root, 1089, 590);
             stage.setTitle("Modify Products Menu");
-
-            //set the scene on the stage
             stage.setScene(scene);
-
-            //show the stage (raise the curtains) and wait meaning any code executed after this
-            //will only be executed after switching back to previous scene
-            //stage.showAndWait();
             stage.show();
+
             //if no selection was made, throw an error message to select an item
         }catch(NullPointerException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);

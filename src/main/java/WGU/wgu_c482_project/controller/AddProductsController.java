@@ -1,10 +1,8 @@
-package WGU.wgu_c482_project;
+package WGU.wgu_c482_project.controller;
 
 import WGU.wgu_c482_project.model.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,9 +19,8 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class ModifyProductsController implements Initializable {
+public class AddProductsController implements Initializable {
     //////////////////////INITIALIZING PRODUCT TEXTFIELDS///////////////////
-    public TextField IDText;
     public TextField nameText;
     public TextField priceText;
     public TextField invText;
@@ -57,34 +54,23 @@ public class ModifyProductsController implements Initializable {
     private TableColumn<Part, Integer> linkedInvLevelCol;
     @FXML
     private TableColumn<Part, Double> linkedPriceCol;
-
     /////////////////////////////////////////////////////////////////////
-    ////////////////////BUTTONS//////////////////////////////////////////
-    @FXML
-    private Button cancelButton; //decided against using due to different nature of cancel and save buttons
-    ////////////////////////////////////////////////////////////////////
-    ////////////////////CREATE TEMPORARY LIST TO HOLD DELETED ASSOCIATED PARTS//////
-    //this tempList will hold all current items of the product.
-    //If user decides to cancel, copy all items within tempList to the associated parts list to revert to original list
-    //before any changes were made
-    private ObservableList<Part> tempList = FXCollections.observableArrayList();
-    ////////////////CREATING NEW PRODUCT OBJECT TO BE USED FOR MODIFICATION////////////////////////////
-    private Product newProduct = null; //new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
-    private int indexOfNewProduct = -1;
+    ////////////////CREATING NEW PRODUCT OBJECT////////////////////////////
+    //initializing new product to use for creating associated parts list. Associated
+    //instance variables will be set when product is saved. If the product is canceled and not saved
+    //then newProduct is unused and will get picked up by garbage collection
+    int defaultID = -1;
+    String defaultString = ".";
+    double defaultPrice = 1.00;
+    int defaultStock = 0;
+    int defaultMin = 0;
+    int defaultMax = 1;
+    Product newProduct = new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
     ///////////////////////////////////////////////////////////////////////
-    ////////////////////////INITIALIZE//////////////////////////////////////
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("Modify Products Scene Initialized");
-        ///////////////INITIALIZING newProduct RECEIVED FROM MAIN MENU////////////////////////////
-        try {
-            newProduct = MainController.getNewProduct();
-            indexOfNewProduct = Inventory.getAllProducts().indexOf(newProduct); //store index to use for update
-            tempList.setAll(newProduct.getAllAssociatedParts());//initialize tempList to capture status of selected products associated parts list
-        }catch(NullPointerException e){
-            System.out.println("Not sure why the first try catch null pointer exception didnt work under main menu");
-
-        }
+        System.out.println("Add Products Scene Initialized");
         ///////////////INITIALIZING PARTS TABLE VIEW///////////////////////
         //calls get-method from Parts class that corresponds to the parameter
         partsTableView.setItems(Inventory.getAllParts());
@@ -94,18 +80,13 @@ public class ModifyProductsController implements Initializable {
         partsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         /////////////////////////////////////////////////////////////////////
         /////////////////////INITIALIZING ASSOCIATED PARTS TABLE VIEW///////////
-        //Need a second try catch exception for when user does not select an item to modify?
-        try {
-            associatedPartsTableView.setItems(newProduct.getAllAssociatedParts());
-        }catch(NullPointerException e){
-            System.out.println("Not sure why the first try catch null pointer exception didnt work under main menu");
-        }
+        associatedPartsTableView.setItems(newProduct.getAllAssociatedParts());
         linkedPartsIDCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         linkedPartsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         linkedInvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         linkedPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         /////////////////////INITIALIZING SEARCH FILTER FUNCTION//////////////
-        partsFilterText.textProperty().addListener(new ChangeListener<String>() {
+       partsFilterText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 //when the parts filter text field detects a change in text, set the table view
@@ -115,17 +96,17 @@ public class ModifyProductsController implements Initializable {
             }
         });
     }
-    //////////////////WIDGET BUTTONS//////////////////////////////////////////
+
     public void onSave(ActionEvent actionEvent) throws IOException{
         try{
-            System.out.println("Saved!");
-            //get all information entered into text fields and store values into appropriate variables.
-            int id = Integer.parseInt(IDText.getText());
+
+            int id = Inventory.newProductID; //newPartId will increment at the end of the function call to ensure each id is unique
             String name = nameText.getText();
             double price = Double.parseDouble(priceText.getText());
             int stock = Integer.parseInt(invText.getText());
-            int max = Integer.parseInt(maxText.getText());
             int min = Integer.parseInt(minText.getText());
+            int max = Integer.parseInt(maxText.getText());
+
             //verifying logical errors are in order so that max value cannot be less than min value, and
             //inventory is within bounds
             if (max < min || stock > max || stock < min){
@@ -135,41 +116,28 @@ public class ModifyProductsController implements Initializable {
                 alert.showAndWait();
                 //System.out.println("Max value is less than min value. Please correct before saving.");
             }
-            else {
-                //use temporary product object to save information into product
+            else{
                 newProduct.setId(id);
                 newProduct.setName(name);
                 newProduct.setPrice(price);
+                newProduct.setStock(stock);
                 newProduct.setMin(min);
                 newProduct.setMax(max);
-                newProduct.setStock(stock);
-                //update the product stored in product list with index containing same id. Since id is not modifiable,
-                //then id is the parameter used to find appropriate item in product list.
-                Inventory.updateProduct(indexOfNewProduct, newProduct);
-                //go back to main menu when product has been successfully updated.
-                //load widget hierarchy of next screen
-                Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
+                Inventory.addProduct(newProduct);
 
-                //get the stage from an event's source widget
-                Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-
-                //create the new scene
-                Scene scene = new Scene(root, 919, 544);
-                stage.setTitle("Main Menu");
-
-                //set the scene on the stage
-                stage.setScene(scene);
-
-                //show the stage (raise the curtains)
-                stage.show();
+                Inventory.incrementProductID(); //increment partID if save was successfull
+                //Saves all information from text field and adds it into the inventory.
+                //go back to main menu
+                goBackToMainMenu(actionEvent);
             }
+
         }catch(NumberFormatException e){
+            //if invalid entries are entered into text field, pop up window claiming values are invalid
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error message");
-            alert.setContentText("Make sure to enter valid entries into text field!");
+            alert.setTitle("Error Message");
+            alert.setContentText("Enter valid values in the provided text fields. Thanks!");
             alert.showAndWait();
         }
-
     }
     public void onAdd(ActionEvent actionEvent) throws IOException{
         //create temporary part to be used as the selected part to add to associated part list
@@ -180,9 +148,7 @@ public class ModifyProductsController implements Initializable {
             newProduct.addAssociatedPart(selectPart);
             System.out.println("Added!");
         }
-        //associatePartsTableview is called here since any updated values get called after the scene has been initialized.
-        //by calling the table view onAdd, it ensures that the newProduct associated with the table shows the appropriate-associatedPartList
-        //associatedPartsTableView.setItems(newProduct.getAllAssociatedParts());
+
     }
     public void onRemove(ActionEvent actionEvent) throws IOException{
         //create a temporary part to be used as the selected associated part
@@ -205,17 +171,33 @@ public class ModifyProductsController implements Initializable {
             }
         }
     }
-    public void toMain(ActionEvent actionEvent) throws IOException {
-        //if user decided to cancel, clear the associated parts list for any changes done to associated list
-        // add all items from tempList back into products associated list.
-        newProduct.getAllAssociatedParts().clear();
-        newProduct.getAllAssociatedParts().setAll(tempList);
-        //after all items have been copied over. Make sure to clear tempList
-        tempList.clear();
+    public void toMain(ActionEvent actionEvent) throws IOException { //toMain represents the cancel button
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu and cancel all changes?");
+        alert.setTitle("Confirmation Message");
 
+        Optional<ButtonType> buttonClicked = alert.showAndWait();
 
+        if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
+            //if the confirmation window ok button has been selected, continue to cancel all changes and go back to main menu
+            goBackToMainMenu(actionEvent);
+        }
+
+    }
+    public void onSearchPart(ActionEvent actionEvent) throws IOException{
+        System.out.println("Searching...");
+        //filterPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
+        //press the enter button
+        if(Inventory.filterPart(partsFilterText.getText()) == Inventory.getAllParts()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Unable to find any items within search parameters");
+            alert.showAndWait();
+        }
+    }
+    //////////////HELPER METHODS//////////////////////////////////////////////
+    public void goBackToMainMenu(ActionEvent actionEvent) throws IOException{
         //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/MainMenu.fxml"));
 
         //get the stage from an event's source widget
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -230,27 +212,5 @@ public class ModifyProductsController implements Initializable {
         //show the stage (raise the curtains)
         stage.show();
     }
-    public void onSearchPart(ActionEvent actionEvent) throws IOException{
-        System.out.println("Searching...");
-        //filterPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
-        //press the enter button
-        if(Inventory.filterPart(partsFilterText.getText()) == Inventory.getAllParts()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Message");
-            alert.setContentText("Unable to find any items within search parameters");
-            alert.showAndWait();
-        }
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////HELPER METHODS//////////////////////////////////
-    public void sendProductInformation(Product product){ //used to obtain product information when selecting from main menu product list
-        IDText.setText(String.valueOf(product.getId()));
-        nameText.setText(product.getName());
-        priceText.setText(String.valueOf(product.getPrice()));
-        invText.setText(String.valueOf(product.getStock()));
-        minText.setText(String.valueOf(product.getMin()));
-        maxText.setText(String.valueOf(product.getMax()));
-        //associatedPartsTableView.setItems(product.getAllAssociatedParts());
-    }
-    ///////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
 }

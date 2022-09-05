@@ -1,4 +1,4 @@
-package WGU.wgu_c482_project;
+package WGU.wgu_c482_project.controller;
 
 import WGU.wgu_c482_project.model.InHousePart;
 import WGU.wgu_c482_project.model.Inventory;
@@ -18,6 +18,7 @@ import java.io.IOException;
 
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 public class ModifyPartsController implements Initializable {
 
@@ -81,16 +82,15 @@ public class ModifyPartsController implements Initializable {
                     Inventory.updatePart(indexOfModifyPart, modifiedItem);
 
                 }
-                //Saves all information from text field and adds it into the inventory. cancelButton fires to get back to main menu.
-                cancelButton.fireEvent(new ActionEvent());
+                //Saves all information from text field and adds it into the inventory. Go back to main menu
+                goBackToMainMenu(actionEvent);
             }
         }catch(NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Stop trying to break my program!");
-            alert.setContentText("Make sure to not not not enter invalid entries into text field!");
+            alert.setTitle("Error Message");
+            alert.setContentText("Make sure to enter valid entries into text field.");
             alert.showAndWait();
         }
-
     }
     public void onInHouse(ActionEvent actionEvent) throws IOException{
         //System.out.println("in house was selected");
@@ -100,22 +100,14 @@ public class ModifyPartsController implements Initializable {
         //System.out.println("outsourced was selected");
         machineID.setText("Company Name");
     }
-    public void toMain(ActionEvent actionEvent) throws IOException {
-        //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
-
-        //get the stage from an event's source widget
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-
-        //create the new scene
-        Scene scene = new Scene(root, 919, 544);
-        stage.setTitle("Main Menu");
-
-        //set the scene on the stage
-        stage.setScene(scene);
-
-        //show the stage (raise the curtains)
-        stage.show();
+    public void toMain(ActionEvent actionEvent) throws IOException { //to main represents the cancel button
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu and cancel all changes?");
+        alert.setTitle("Confirmation Message");
+        Optional<ButtonType> buttonClicked = alert.showAndWait();
+        if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
+            //if the confirmation window ok button has been selected, continue cancel changes and go back to main menu
+            goBackToMainMenu(actionEvent);
+        }
     }
     //////////////////////////////////////////////////////////////////////////////
     //////////////////////////HELPER METHODS//////////////////////////////////////
@@ -140,6 +132,22 @@ public class ModifyPartsController implements Initializable {
 
 
     }
+    public void goBackToMainMenu(ActionEvent actionEvent) throws IOException{
+        //load widget hierarchy of next screen
+        Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/MainMenu.fxml"));
 
+        //get the stage from an event's source widget
+        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+        //create the new scene
+        Scene scene = new Scene(root, 919, 544);
+        stage.setTitle("Main Menu");
+
+        //set the scene on the stage
+        stage.setScene(scene);
+
+        //show the stage (raise the curtains)
+        stage.show();
+    }
     /////////////////////////////////////////////////////////////////////////////////
 }
