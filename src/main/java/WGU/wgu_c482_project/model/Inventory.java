@@ -29,26 +29,14 @@ public class Inventory {
     public static void updatePart(int index, Part selectedPart){
         //update the part at the given index with the selectedPart
         Inventory.getAllParts().set(index, selectedPart);
-
     }
     public static boolean deletePart(Part selectedPart){ //deletes an item from parts list
-        //iterate through parts list. If the parameter ID matches
-        //with an id found in parts list, remove that item
-        int id = selectedPart.getId();
-        int index = -1;
-        int i = -1;
-        for (Part item : Inventory.getAllParts()) {
-            i += 1;
-            if (item.getId() == id) {
-                //need to verify if the deleted part is also contained within filtered parts list. If so, also delete
-                //from the filtered parts list.
-                if(Inventory.getAllFilteredParts().contains(item)) {
-                    Inventory.getAllFilteredParts().remove(item);
-                }
-                return Inventory.getAllParts().remove(item);
-            }
+        //need to verify if the deleted part is also contained within filtered parts list. If so, also delete
+        //from the filtered parts list.
+        if(Inventory.getAllFilteredParts().contains(selectedPart)) {
+            Inventory.getAllFilteredParts().remove(selectedPart);
         }
-        return false;
+        return Inventory.getAllParts().remove(selectedPart);
     }
     public static ObservableList<Part> getAllParts(){
         return allParts;
@@ -86,22 +74,12 @@ public class Inventory {
         Inventory.getAllProducts().set(index, selectedProduct);
     }
     public static boolean deleteProduct(Product selectedProduct){ //deletes an item from product list
-        int id = selectedProduct.getId();
-        int index = -1;
-        int i = -1;
         //need to verify if the deleted part is also contained within filtered products list. If so, also delete
         //from the filtered parts list.
-        for (Product item : Inventory.getAllProducts()) {
-            i += 1;
-            if (item.getId() == id) {
-                if(Inventory.getAllFilteredProducts().contains(item)) {
-                    Inventory.getAllFilteredProducts().remove(item);
-                }
-                return Inventory.getAllProducts().remove(item);
-
-            }
+        if(Inventory.getAllFilteredProducts().contains(selectedProduct)) {
+            Inventory.getAllFilteredProducts().remove(selectedProduct);
         }
-        return false;
+        return Inventory.getAllProducts().remove(selectedProduct);
     }
     public static ObservableList<Product> getAllProducts(){
         return allProducts;
