@@ -61,7 +61,7 @@ public class ModifyProductsController implements Initializable {
     /////////////////////////////////////////////////////////////////////
     ////////////////////BUTTONS//////////////////////////////////////////
     @FXML
-    private Button cancelButton;
+    private Button cancelButton; //decided against using due to different nature of cancel and save buttons
     ////////////////////////////////////////////////////////////////////
     ////////////////////CREATE TEMPORARY LIST TO HOLD DELETED ASSOCIATED PARTS//////
     //this tempList will hold all current items of the product.
@@ -229,6 +229,17 @@ public class ModifyProductsController implements Initializable {
 
         //show the stage (raise the curtains)
         stage.show();
+    }
+    public void onSearchPart(ActionEvent actionEvent) throws IOException{
+        System.out.println("Searching...");
+        //filterPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
+        //press the enter button
+        if(Inventory.filterPart(partsFilterText.getText()) == Inventory.getAllParts()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Unable to find any items within search parameters");
+            alert.showAndWait();
+        }
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////HELPER METHODS//////////////////////////////////

@@ -203,4 +203,15 @@ public class AddProductsController implements Initializable {
         }
 
     }
+    public void onSearchPart(ActionEvent actionEvent) throws IOException{
+        System.out.println("Searching...");
+        //filterPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
+        //press the enter button
+        if(Inventory.filterPart(partsFilterText.getText()) == Inventory.getAllParts()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Unable to find any items within search parameters");
+            alert.showAndWait();
+        }
+    }
 }

@@ -89,7 +89,7 @@
         </TableView>
         <Button layoutX="939.0" layoutY="283.0" mnemonicParsing="false" onAction="#onAdd" text="Add" />
         <Button layoutX="837.0" layoutY="551.0" mnemonicParsing="false" onAction="#onRemove" prefHeight="25.0" prefWidth="158.0" text="Remove Associated Part" />
-        <TextField fx:id="partsFilterText" layoutX="816.0" layoutY="24.0" prefHeight="25.0" prefWidth="193.0" promptText="Search by Product ID or Name" />
+        <TextField fx:id="partsFilterText" layoutX="816.0" layoutY="24.0" onAction="#onSearchPart" prefHeight="25.0" prefWidth="193.0" promptText="Search by Product ID or Name" />
         <Label layoutX="616.0" layoutY="9.0" prefHeight="36.0" prefWidth="178.0" text="All Parts ">
             <font>
                 <Font name="System Bold" size="18.0" />
