@@ -65,7 +65,8 @@ public class ModifyProductsController implements Initializable {
     ////////////////////////////////////////////////////////////////////
     ////////////////////CREATE TEMPORARY LIST TO HOLD DELETED ASSOCIATED PARTS//////
     //this tempList will hold all current items of the product.
-    //If user decides to cancel, copy all items within tempList to the associated parts list to revert back
+    //If user decides to cancel, copy all items within tempList to the associated parts list to revert to original list
+    //before any changes were made
     private ObservableList<Part> tempList = FXCollections.observableArrayList();
     ////////////////CREATING NEW PRODUCT OBJECT TO BE USED FOR MODIFICATION////////////////////////////
     private Product newProduct = null; //new Product(defaultID,defaultString,defaultPrice,defaultStock,defaultMin,defaultMax);
@@ -76,10 +77,14 @@ public class ModifyProductsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Modify Products Scene Initialized");
         ///////////////INITIALIZING newProduct RECEIVED FROM MAIN MENU////////////////////////////
-        newProduct = MainController.getNewProduct();
-        indexOfNewProduct = Inventory.getAllProducts().indexOf(newProduct); //store index to use for update
-        tempList.setAll(newProduct.getAllAssociatedParts());//initialize tempList to capture status of selected products associated parts list
-        System.out.println(tempList);
+        try {
+            newProduct = MainController.getNewProduct();
+            indexOfNewProduct = Inventory.getAllProducts().indexOf(newProduct); //store index to use for update
+            tempList.setAll(newProduct.getAllAssociatedParts());//initialize tempList to capture status of selected products associated parts list
+        }catch(NullPointerException e){
+            System.out.println("Not sure why the first try catch null pointer exception didnt work under main menu");
+
+        }
         ///////////////INITIALIZING PARTS TABLE VIEW///////////////////////
         //calls get-method from Parts class that corresponds to the parameter
         partsTableView.setItems(Inventory.getAllParts());
@@ -196,20 +201,15 @@ public class ModifyProductsController implements Initializable {
                 //if the confirmation window ok button has been selected, continue to delete the selected item.
                 //call delete associated part to find matching ID to the selected associated part. If matching ID is found,
                 //then the associated part is removed from the associated part list
-
                 newProduct.deleteAssociatedPart(selectedAssociatedPart);
             }
         }
     }
     public void toMain(ActionEvent actionEvent) throws IOException {
-        //if user decided to cancel, clear the associated parts list
-        // add all items in tempList back into products associated list.
+        //if user decided to cancel, clear the associated parts list for any changes done to associated list
+        // add all items from tempList back into products associated list.
         newProduct.getAllAssociatedParts().clear();
-        System.out.println(tempList);
         newProduct.getAllAssociatedParts().setAll(tempList);
-        /*for(Part item : tempList){
-            newProduct.addAssociatedPart(item);
-        }*/
         //after all items have been copied over. Make sure to clear tempList
         tempList.clear();
 
