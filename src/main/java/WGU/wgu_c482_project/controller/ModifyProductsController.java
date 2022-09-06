@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Brendan Thoeung | ID: 007494550 | WGU
+ */
 package WGU.wgu_c482_project.controller;
 
 import WGU.wgu_c482_project.model.*;
@@ -126,6 +130,11 @@ public class ModifyProductsController implements Initializable {
      A product object that was initialized sets their appropriate instance variables to the corresponding variables and
      the index of the selected item that the user wanted to modify gets replaced/updated to the new product.
      The user is then sent back to the main menu scene.
+     LOGICAL ERROR: A logical error occured when saving the product if the user entered max values that were less than the minimum,
+     and vice versa. Additionally, a logical error occured when the user entered an inventory value above the max value, or below
+     the min value. Moreover, if the name field was left blank, then the item would be saved without a name.
+     To correct this, I created a control flow statement to satisfy these conditions, and if the conditions
+     were not satisfied, then the user will not be able to proceed.
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
     public void onSave(ActionEvent actionEvent) throws IOException{
@@ -146,6 +155,12 @@ public class ModifyProductsController implements Initializable {
                 alert.setContentText("Max, min, or inventory levels do not make sense. Please correct this before saving.");
                 alert.showAndWait();
                 //System.out.println("Max value is less than min value. Please correct before saving.");
+            }
+            else if(name.isBlank()){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setContentText("Please enter a name for the item.");
+                alert.showAndWait();
             }
             else {
                 //use temporary product object to save information into product
@@ -171,7 +186,10 @@ public class ModifyProductsController implements Initializable {
     }
     /** This is the onAdd method.
      This is a method that creates a part object that corresponds to the user selection from the parts table view.
-     The part object gets added to the product associated parts list if the selection is not null
+     The part object gets added to the product associated parts list if the selection is not null.
+     LOGICAL ERROR: A logical error occured when adding a part to the associated parts list. The user could continue
+     to add the same parts to the associated parts list. In order to correct this, I created a control flow statement to
+     check if the item was already contained within the associated parts list. If so, then part would not be added.
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
     public void onAdd(ActionEvent actionEvent) throws IOException{
@@ -215,6 +233,12 @@ public class ModifyProductsController implements Initializable {
     }
     /** This is the toMain method.
      This is a method that reverts all changes made and takes the user back to the main menu when they confirm to cancel changes.
+     LOGICAL ERROR: A logical error occured when attempting to cancel changes to the product. If the user attempted to add
+     associated parts to the product and decided to cancel changes, the product would still contain the added items if the user
+     were to attempt to modify the same product. In order to correct this, I had to create a temporary list that captured
+     the status of associated parts list of the product as soon as the modify product scene was initialized. If the user
+     decided to cancel, then the current associated parts list was cleared, and the temp list was copied into the associated
+     parts list.
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
     public void toMain(ActionEvent actionEvent) throws IOException { //represents cancel button

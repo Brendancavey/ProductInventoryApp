@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Brendan Thoeung | ID: 007494550 | WGU
+ */
 package WGU.wgu_c482_project.model;
 
 /** This class is a blueprint OutsourcedPart class that inherits from Part class*/

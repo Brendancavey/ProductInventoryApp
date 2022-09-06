@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="590.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WGU.wgu_c482_project.controller.AddPartsController">
+<AnchorPane prefHeight="590.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WGU.wgu_c482_project.controller.AddPartsController">
    <children>
       <Button fx:id="cancelButton" layoutX="479.0" layoutY="443.0" maxHeight="92.0" maxWidth="139.0" mnemonicParsing="false" onAction="#toMain" prefHeight="42.0" prefWidth="91.0" text="Cancel" />
       <Button layoutX="366.0" layoutY="443.0" maxHeight="42.0" maxWidth="91.0" mnemonicParsing="false" onAction="#onSave" prefHeight="42.0" prefWidth="91.0" text="Save" />

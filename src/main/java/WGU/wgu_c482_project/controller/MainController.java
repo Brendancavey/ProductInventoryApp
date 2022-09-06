@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Brendan Thoeung | ID: 007494550 | WGU
+ */
 package WGU.wgu_c482_project.controller;
 
 import WGU.wgu_c482_project.model.Inventory;
@@ -141,6 +145,9 @@ public class MainController implements Initializable {
     }
     /** This is the onModifyPart method.
      This is a method takes the user to the modify part scene.
+     RUNTIME ERROR: A runtime error occured when attempting to modify a part without first selecting a part from the parts
+     tableview. I corrected the issue by assigning a null pointer exception when clicking the corresponding button and verifying with the
+     user to select a part to modify.
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
     public void onModifyPart(ActionEvent actionEvent) throws IOException {
@@ -177,6 +184,9 @@ public class MainController implements Initializable {
     }
     /** This is the onDeletePart method.
      This is a method that deletes a part that corresponds to the user's selection.
+     RUNTIME ERROR: A runtime error occured when attempting to delete a part without first selecting a part from the parts
+     tableview. I corrected the issue by assigning a null pointer exception when clicking the corresponding button and verifying with the
+     user to select a part to delete.
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
     public void onDeletePart(ActionEvent actionEvent) throws IOException{
@@ -242,6 +252,9 @@ public class MainController implements Initializable {
     }
     /** This is the onModifyProduct method.
      This is a method takes the user to the modify product scene.
+     RUNTIME ERROR: A runtime error occured when attempting to modify a product without first selecting a product from the product
+     tableview. I corrected the issue by assigning a null pointer exception when clicking the corresponding button and verifying with the
+     user to select a product to modify.
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
     public void onModifyProduct(ActionEvent actionEvent) throws IOException {
@@ -280,6 +293,9 @@ public class MainController implements Initializable {
     }
     /** This is the onDeleteProduct method.
      This is a method that deletes a product that corresponds to the user's selection.
+     RUNTIME ERROR: A runtime error occured when attempting to delete a product without first selecting a product from the product
+     tableview. I corrected the issue by assigning a null pointer exception when clicking the corresponding button and verifying with the
+     user to select a product to delete.
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
     public void onDeleteProduct(ActionEvent actionEvent) throws IOException{

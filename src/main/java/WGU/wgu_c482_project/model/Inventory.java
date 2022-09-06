@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Brendan Thoeung | ID: 007494550 | WGU
+ */
 package WGU.wgu_c482_project.model;
 
 import javafx.collections.FXCollections;
@@ -43,6 +47,11 @@ public class Inventory {
     }
     /** This is the deletePart method.
      * This method takes the given selectedPart and removes it from the all parts list.
+     * LOGICAL ERROR: A logical error occured when deleteing a part after the user queried a search. Since
+     * the search returns the filtered parts list to display all filtered parts, when the user decides to delete
+     * a part, it would only delete the item from the filtered parts list and not the original list. In order to correct
+     * this, I made a control flow statement to check if the filtered parts list contains the part to delete. If so, delete
+     * that item and the same item from the all parts list.
      * @param selectedPart The part to be removed from the all parts list.
      */
     public static boolean deletePart(Part selectedPart){ //deletes an item from parts list
@@ -121,6 +130,11 @@ public class Inventory {
     }
     /** This is the deleteProduct method.
      * This method takes the given selectedProduct and removes it from the all products list.
+     * LOGICAL ERROR: A logical error occured when deleteing a product after the user queried a search. Since
+     * the search returns the filtered products list to display all filtered products, when the user decides to delete
+     * a product, it would only delete the item from the filtered products list and not the original list. In order to correct
+     * this, I made a control flow statement to check if the filtered products list contains the product to delete. If so, delete
+     * that item and the same item from the all products list.
      * @param selectedProduct The product to be removed from the all products list.
      */
     public static boolean deleteProduct(Product selectedProduct){ //deletes an item from product list

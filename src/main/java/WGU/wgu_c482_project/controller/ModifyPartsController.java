@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Brendan Thoeung | ID: 007494550 | WGU
+ */
 package WGU.wgu_c482_project.controller;
 
 import WGU.wgu_c482_project.model.InHousePart;
@@ -50,6 +54,11 @@ public class ModifyPartsController implements Initializable {
     /** This is the onSave method.
      This is a method that stores all information from the corresponding text fields into appropriate variables to create a part object.
      The part object then replaces the object within the Inventory list with the same index. The user is then sent back to the main menu scene.
+     LOGICAL ERROR: A logical error occured when saving the part if the user entered max values that were less than the minimum,
+     and vice versa. Additionally, a logical error occured when the user entered an inventory value above the max value, or below
+     the min value. Moreover, if the name field was left blank, then the item would be saved without a name.
+     To correct this, I created a control flow statement to satisfy these conditions, and if the conditions
+     were not satisfied, then the user will not be able to proceed.
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
     public void onSave(ActionEvent actionEvent) throws IOException{
@@ -76,6 +85,12 @@ public class ModifyPartsController implements Initializable {
                 alert.setContentText("Max, min, or inventory levels do not make sense. Please correct this before saving.");
                 alert.showAndWait();
                 //System.out.println("Max value is less than min value. Please correct before saving.");
+            }
+            else if(name.isBlank()){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setContentText("Please enter a name for the item.");
+                alert.showAndWait();
             }
             else {
                 //getting index of modified item to use for update within inventory updatePart method
