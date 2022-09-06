@@ -98,15 +98,23 @@ public class Product {
     }
     ////////////////////////////////////////////////////////////
     /////////////////ASSOCIATED PARTS METHODS///////////////
+    /**
+     * @return associatedParts returns associatedParts list
+     */
     public ObservableList<Part> getAllAssociatedParts(){
         return associatedParts;
     }
-    /*public void setAllAssociatedParts(ObservableList newList){ method is unused
-        associatedParts = newList;
-    }*/
+    /** This is the addAssociatedPart method.
+     * This method takes the parameter and adds it to the associated parts list.
+     * @param part The part to add to the associated parts list.
+     */
     public void addAssociatedPart(Part part){
         associatedParts.add(part);
     }
+    /** This is the deleteAssociatedPart method.
+     * This method takes the parameter and deletes it from the associated parts list.
+     * @param selectedAssociatedPart The part to delete from the associated parts list.
+     */
     public boolean deleteAssociatedPart(Part selectedAssociatedPart){
         //iterate through associatedParts list. If the selected associated parts ID matches
         //with an id found in associated parts list, remove that item
