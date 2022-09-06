@@ -121,6 +121,13 @@ public class ModifyProductsController implements Initializable {
         });
     }
     //////////////////WIDGET BUTTONS//////////////////////////////////////////
+    /** This is the onSave method.
+     This is a method that stores all information from the corresponding text fields into appropriate variables.
+     A product object that was initialized sets their appropriate instance variables to the corresponding variables and
+     the index of the selected item that the user wanted to modify gets replaced/updated to the new product.
+     The user is then sent back to the main menu scene.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onSave(ActionEvent actionEvent) throws IOException{
         try{
             System.out.println("Saved!");
@@ -162,6 +169,11 @@ public class ModifyProductsController implements Initializable {
         }
 
     }
+    /** This is the onAdd method.
+     This is a method that creates a part object that corresponds to the user selection from the parts table view.
+     The part object gets added to the product associated parts list if the selection is not null
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onAdd(ActionEvent actionEvent) throws IOException{
         //create temporary part to be used as the selected part to add to associated part list
         Part selectPart = (Part) partsTableView.getSelectionModel().getSelectedItem();
@@ -175,6 +187,11 @@ public class ModifyProductsController implements Initializable {
         //by calling the table view onAdd, it ensures that the newProduct associated with the table shows the appropriate-associatedPartList
         //associatedPartsTableView.setItems(newProduct.getAllAssociatedParts());
     }
+    /** This is the onRemove method.
+     This is a method that creates a part object that corresponds to the user selection from the associated parts table view.
+     If the user confirms to delete, then the part gets removed from the associated parts list that corresponds to the current product.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void onRemove(ActionEvent actionEvent) throws IOException{
         //create a temporary part to be used as the selected associated part
         Part selectedAssociatedPart = (Part)associatedPartsTableView.getSelectionModel().getSelectedItem();
@@ -196,6 +213,10 @@ public class ModifyProductsController implements Initializable {
             }
         }
     }
+    /** This is the toMain method.
+     This is a method that reverts all changes made and takes the user back to the main menu when they confirm to cancel changes.
+     @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
+     */
     public void toMain(ActionEvent actionEvent) throws IOException { //represents cancel button
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu and cancel all changes?");
         alert.setTitle("Confirmation Message");
@@ -212,9 +233,13 @@ public class ModifyProductsController implements Initializable {
             goBackToMainMenu(actionEvent);
         }
     }
+    /** This is the onSearchPart method.
+     This is a method that uses the corresponding text field as a search query and displays an error message if the search query is unable to find the desired item.
+     @param actionEvent Method takes in an action event that gets triggered when the user interacts with the corresponding action (the enter key).
+     */
     public void onSearchPart(ActionEvent actionEvent) throws IOException{
         System.out.println("Searching...");
-        //filterPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
+        //lookupPart returns the original list if nothing is found. Therefore, show error message claiming nothing was wound if user fires action event onSearchPart or
         //press the enter button
         if(Inventory.lookupPart(partsFilterText.getText()) == Inventory.getAllParts()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -225,6 +250,11 @@ public class ModifyProductsController implements Initializable {
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////HELPER METHODS//////////////////////////////////
+    /** This is the sendProducttInformation method.
+     This is a helper method that captures product information from a different scene, and displays
+     the information to the corresponding labels within the current scene.
+     @param product Method takes in a product object
+     */
     public void sendProductInformation(Product product){ //used to obtain product information when selecting from main menu product list
         IDText.setText(String.valueOf(product.getId()));
         nameText.setText(product.getName());
@@ -234,6 +264,10 @@ public class ModifyProductsController implements Initializable {
         maxText.setText(String.valueOf(product.getMax()));
         //associatedPartsTableView.setItems(product.getAllAssociatedParts());
     }
+    /** This is the goBackToMainMenu method.
+     This is a helper method that reduces redundancy within the code. This method is called
+     whenever it is required that the user go back to the main menu.
+     */
     public void goBackToMainMenu(ActionEvent actionEvent) throws IOException{
         //load widget hierarchy of next screen
         Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/MainMenu.fxml"));

@@ -4,10 +4,11 @@
 
 /**
  *
- * @author Brendan Thoeung
+ * @author Brendan Thoeung WGU
  */
 package WGU.wgu_c482_project.model;
 
+/** This class is a blueprint abstract Part class to be inherited by Inhouse or Outsourced class.*/
 public abstract class Part {
     private int id;
     private String name;
