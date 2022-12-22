@@ -1,4 +1,4 @@
-module com.example.wgu_c482_project {
+module com.example.product_inventory {
     requires javafx.controls;
     requires javafx.fxml;
 
