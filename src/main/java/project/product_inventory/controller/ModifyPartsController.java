@@ -1,13 +1,13 @@
 /**
  *
- * @author Brendan Thoeung | ID: 007494550 | WGU
+ * @author Brendan Thoeung
  */
-package WGU.wgu_c482_project.controller;
+package project.product_inventory.controller;
 
-import WGU.wgu_c482_project.model.InHousePart;
-import WGU.wgu_c482_project.model.Inventory;
-import WGU.wgu_c482_project.model.OutsourcedPart;
-import javafx.fxml.FXML;
+import project.product_inventory.model.InHousePart;
+import project.product_inventory.model.Inventory;
+import project.product_inventory.model.OutsourcedPart;
+import project.product_inventory.model.Part;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -21,8 +21,8 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-/** This class is the controller for add parts scene.*/
-public class AddPartsController implements Initializable {
+/** This class is the controller for modify parts scene.*/
+public class ModifyPartsController implements Initializable {
 
     //allowing widgets within fxml page to be used within code
     public RadioButton inHouse;
@@ -35,17 +35,25 @@ public class AddPartsController implements Initializable {
     public TextField minText;
     public TextField maxText;
     public TextField machineIDText;
-
+    public TextField IDText;
+    //////////////////CREATING NEW PART OBJECT TO BE USED FOR MODIFICATION///////////////
+    Part modifyPart = null;
+    /////////////////////////////////////////////////////////////////////////////////
     /** This is the initialize method.
-     This is a method that gets initialized when first landing on the add parts scene.
+     This is a method that gets initialized when first landing on the modify parts scene.
      @param url Method takes in an url to determine the location of the file.
      @param resourceBundle takes in the resource bundle required.
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {System.out.println("Add Parts Scene Initialized");}
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("Modify Parts Scene Initialized");
+        modifyPart = MainController.getModifyPart(); //initializing modifyPart with information sent from main controller
+    }
+
+    //////////////////////////WIDGET BUTTONS///////////////////////////////////////
     /** This is the onSave method.
      This is a method that stores all information from the corresponding text fields into appropriate variables to create a part object.
-     The part object then gets added into the Inventory list and the user is sent back to the main menu scene.
+     The part object then replaces the object within the Inventory list with the same index. The user is then sent back to the main menu scene.
      LOGICAL ERROR: A logical error occured when saving the part if the user entered max values that were less than the minimum,
      and vice versa. Additionally, a logical error occured when the user entered an inventory value above the max value, or below
      the min value. Moreover, if the name field was left blank, then the item would be saved without a name.
@@ -54,9 +62,7 @@ public class AddPartsController implements Initializable {
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
     public void onSave(ActionEvent actionEvent) throws IOException{
-
         try{
-            //boolean used to verify which radio button was selected to create the correct object
             boolean inHouseSelected = true;
             if(inHouse.isSelected()){
                 inHouseSelected = true;
@@ -64,7 +70,7 @@ public class AddPartsController implements Initializable {
             else if(outsourced.isSelected()){
                 inHouseSelected = false;
             }
-            int id = Inventory.newPartID; //newPartId will increment at the end of the function call to ensure each id is unique
+            int id = Integer.parseInt(IDText.getText());
             String name = nameText.getText();
             double price = Double.parseDouble(priceText.getText());
             int stock = Integer.parseInt(invText.getText());
@@ -72,7 +78,7 @@ public class AddPartsController implements Initializable {
             int max = Integer.parseInt(maxText.getText());
 
             //verifying logical errors are in order so that max value cannot be less than min value, and
-            //inventory levels within bounds
+            //inventory is within bounds
             if (max < min || stock > max || stock < min){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Message");
@@ -86,31 +92,27 @@ public class AddPartsController implements Initializable {
                 alert.setContentText("Please enter a name for the item.");
                 alert.showAndWait();
             }
-            else{
+            else {
+                //getting index of modified item to use for update within inventory updatePart method
+                int indexOfModifyPart = Inventory.getAllParts().indexOf(modifyPart);
                 if (inHouseSelected == true) {
-
-                    int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or outsourced
-                    Inventory.addPart(new InHousePart(id, name, price, stock, min, max, machineID));
-                }
-                else if (inHouseSelected == false){
+                    int machineID = Integer.parseInt(machineIDText.getText()); //machineID is labeled but the fields are the same for inHouse or
+                    InHousePart modifiedItem = new InHousePart(id, name, price, stock, min, max, machineID);
+                    Inventory.updatePart(indexOfModifyPart, modifiedItem);
+                } else if (inHouseSelected == false) {
                     String machineID = machineIDText.getText(); //machineID is labeled but the fields are the same for inHouse or outsourced
-                    Inventory.addPart(new OutsourcedPart(id, name, price, stock, min, max, machineID));
+                    OutsourcedPart modifiedItem = new OutsourcedPart(id, name, price, stock, min, max, machineID);
+                    Inventory.updatePart(indexOfModifyPart, modifiedItem);
 
                 }
-                Inventory.incrementPartID(); //increment partID if save was successfull
-                //information successfully saved. Go back to main menu.
+                //Saves all information from text field and adds it into the inventory. Go back to main menu
                 goBackToMainMenu(actionEvent);
             }
-
-        //if invalid entries are entered into text field, pop up window claiming values are invalid
         }catch(NumberFormatException e){
-            //System.out.println("Enter valid values in the provided text field. Thanks!");
-            //System.out.println("Exception: " + e);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
-            alert.setContentText("Enter valid values in the provided text fields. Thanks!");
+            alert.setContentText("Make sure to enter valid entries into text field.");
             alert.showAndWait();
-
         }
     }
     /** This is the onInHouse method.
@@ -133,22 +135,48 @@ public class AddPartsController implements Initializable {
      This is a method that reverts all changes made and takes the user back to the main menu when they confirm to cancel changes.
      @param actionEvent Method takes in an action event that gets triggered when the user clicks on the corresponding button.
      */
-    public void toMain(ActionEvent actionEvent) throws IOException { //toMain represents the cancel button
+    public void toMain(ActionEvent actionEvent) throws IOException { //to main represents the cancel button
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to go back to main menu and cancel all changes?");
         alert.setTitle("Confirmation Message");
         Optional<ButtonType> buttonClicked = alert.showAndWait();
         if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
-            //if the confirmation window ok button has been selected, continue to cancel and go back to main menu
+            //if the confirmation window ok button has been selected, continue cancel changes and go back to main menu
             goBackToMainMenu(actionEvent);
         }
     }
-    ///////////////////HELPER METHODS/////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////HELPER METHODS//////////////////////////////////////
+    /** This is the sendPartInformation method.
+     This is a helper method that captures part information from a different scene, and displays
+     the information to the corresponding labels within the current scene.
+     @param part Method takes in a part object
+     */
+    public void sendPartInformation(Part part){
+        IDText.setText(String.valueOf(part.getId()));
+        nameText.setText(part.getName());
+        priceText.setText(String.valueOf(part.getPrice()));
+        invText.setText(String.valueOf(part.getStock()));
+        minText.setText(String.valueOf(part.getMin()));
+        maxText.setText(String.valueOf(part.getMax()));
+        //machineIDText.setText(String.valueOf(part.getMachineID()));
+        if(part instanceof InHousePart){
+            machineIDText.setText(String.valueOf(((InHousePart)part).getMachineID()));
+            inHouse.fire();
+        }
+        else if(part instanceof OutsourcedPart){
+            //machineIDText is the name of the text field even though I am getting the company name
+            //due to the outsourced part.
+            machineIDText.setText(((OutsourcedPart)part).getCompanyName());
+            outsourced.fire();
+        }
+    }
     /** This is the goBackToMainMenu method.
      This is a helper method that reduces redundancy within the code. This method is called
      whenever it is required that the user go back to the main menu.
      */
     public void goBackToMainMenu(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/MainMenu.fxml"));
+        //load widget hierarchy of next screen
+        Parent root = FXMLLoader.load(getClass().getResource("/project/product_inventory/MainMenu.fxml"));
 
         //get the stage from an event's source widget
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -163,5 +191,5 @@ public class AddPartsController implements Initializable {
         //show the stage (raise the curtains)
         stage.show();
     }
-    ////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
 }

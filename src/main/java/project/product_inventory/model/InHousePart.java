@@ -1,4 +1,4 @@
-package WGU.wgu_c482_project.model;
+package project.product_inventory.model;
 
 /** This class is a blueprint InHousePart class that inherits from Part class*/
 public class InHousePart extends Part{

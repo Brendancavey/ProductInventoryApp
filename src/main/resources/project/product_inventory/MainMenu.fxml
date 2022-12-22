@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxWidth="1028.0" prefHeight="544.0" prefWidth="919.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WGU.wgu_c482_project.controller.MainController">
+<AnchorPane maxWidth="1028.0" prefHeight="544.0" prefWidth="919.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.product_inventory.controller.MainController">
    <children>
       <GridPane gridLinesVisible="true" layoutX="57.0" layoutY="92.0" prefHeight="386.0" prefWidth="809.0">
          <columnConstraints>

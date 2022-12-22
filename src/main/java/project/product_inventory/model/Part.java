@@ -1,12 +1,8 @@
 /**
- * Supplied class Part.java
- */
-
-/**
  *
- * @author Brendan Thoeung | ID: 007494550 | WGU
+ * @author Brendan Thoeung
  */
-package WGU.wgu_c482_project.model;
+package project.product_inventory.model;
 
 /** This class is a blueprint abstract Part class to be inherited by Inhouse or Outsourced class.*/
 public abstract class Part {

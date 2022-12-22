@@ -1,12 +1,12 @@
 /**
  *
- * @author Brendan Thoeung | ID: 007494550 | WGU
+ * @author Brendan Thoeung
  */
-package WGU.wgu_c482_project.controller;
+package project.product_inventory.controller;
 
-import WGU.wgu_c482_project.model.Inventory;
-import WGU.wgu_c482_project.model.Part;
-import WGU.wgu_c482_project.model.Product;
+import project.product_inventory.model.Inventory;
+import project.product_inventory.model.Part;
+import project.product_inventory.model.Product;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -128,7 +128,7 @@ public class MainController implements Initializable {
      */
     public void onAddPart(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(MainController.class.getResource("/WGU/wgu_c482_project/AddParts.fxml"));
+        Parent root = FXMLLoader.load(MainController.class.getResource("/project/product_inventory/AddParts.fxml"));
 
         //get the stage from an event's source widget
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -154,7 +154,7 @@ public class MainController implements Initializable {
         try{
             //create fxml loader object to let loader object know which scene to view
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainController.class.getResource("/WGU/wgu_c482_project/ModifyParts.fxml"));
+            loader.setLocation(MainController.class.getResource("/project/product_inventory/ModifyParts.fxml"));
             modifyPart = partsTableView.getSelectionModel().getSelectedItem(); //save the selection into a modifyPart object to send to the modify part scene
             loader.load();
 
@@ -235,7 +235,7 @@ public class MainController implements Initializable {
      */
     public void onAddProduct(ActionEvent actionEvent) throws IOException {
         //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/AddProducts.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/project/product_inventory/AddProducts.fxml"));
 
         //get the stage from an event's source widget
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -261,7 +261,7 @@ public class MainController implements Initializable {
         try{
             //create fxml loader object to let loader object know which scene to view
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/WGU/wgu_c482_project/ModifyProducts.fxml"));
+            loader.setLocation(getClass().getResource("/project/product_inventory/ModifyProducts.fxml"));
             //setting newProduct before loader is loaded to save the information before loading loader scene
             //used so that modifyScreen can receive Product information from main menu screen
             newProduct = productsTableView.getSelectionModel().getSelectedItem(); //get selection and save into a product object to send to modify product scene

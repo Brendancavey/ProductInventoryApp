@@ -3,10 +3,10 @@ module com.example.wgu_c482_project {
     requires javafx.fxml;
 
 
-    opens WGU.wgu_c482_project to javafx.fxml;
-    opens WGU.wgu_c482_project.model to javafx.fxml;
-    opens WGU.wgu_c482_project.controller to javafx.fxml;
-    exports WGU.wgu_c482_project;
-    exports WGU.wgu_c482_project.model;
-    exports WGU.wgu_c482_project.controller;
+    opens project.product_inventory to javafx.fxml;
+    opens project.product_inventory.model to javafx.fxml;
+    opens project.product_inventory.controller to javafx.fxml;
+    exports project.product_inventory;
+    exports project.product_inventory.model;
+    exports project.product_inventory.controller;
 }

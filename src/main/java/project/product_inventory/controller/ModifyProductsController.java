@@ -1,10 +1,10 @@
 /**
  *
- * @author Brendan Thoeung | ID: 007494550 | WGU
+ * @author Brendan Thoeung
  */
-package WGU.wgu_c482_project.controller;
+package project.product_inventory.controller;
 
-import WGU.wgu_c482_project.model.*;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,6 +19,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import project.product_inventory.model.Inventory;
+import project.product_inventory.model.Part;
+import project.product_inventory.model.Product;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -294,7 +298,7 @@ public class ModifyProductsController implements Initializable {
      */
     public void goBackToMainMenu(ActionEvent actionEvent) throws IOException{
         //load widget hierarchy of next screen
-        Parent root = FXMLLoader.load(getClass().getResource("/WGU/wgu_c482_project/MainMenu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/project/product_inventory/MainMenu.fxml"));
 
         //get the stage from an event's source widget
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();

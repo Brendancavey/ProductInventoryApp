@@ -1,8 +1,8 @@
 /**
  *
- * @author Brendan Thoeung | ID: 007494550 | WGU
+ * @author Brendan Thoeung
  */
-package WGU.wgu_c482_project.model;
+package project.product_inventory.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
